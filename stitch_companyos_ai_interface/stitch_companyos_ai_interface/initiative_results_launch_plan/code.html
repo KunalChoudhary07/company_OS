@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Coffee Startup Launch Plan - CompanyOS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#dce4e5",
+                        "surface-tint": "#00daf3",
+                        "surface-variant": "#2e3638",
+                        "on-surface-variant": "#bac9cc",
+                        "on-secondary-fixed": "#1a1b1f",
+                        "surface-container-highest": "#2e3638",
+                        "surface-container-high": "#242b2d",
+                        "secondary-fixed": "#e3e2e7",
+                        "primary-container": "#00e5ff",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#46464b",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "surface-dim": "#0d1516",
+                        "outline": "#849396",
+                        "secondary-container": "#46464b",
+                        "surface-container": "#192122",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#00daf3",
+                        "on-secondary-container": "#b5b4ba",
+                        "tertiary-fixed": "#ffdf96",
+                        "on-background": "#dce4e5",
+                        "secondary": "#c7c6cb",
+                        "surface": "#0d1516",
+                        "primary": "#c3f5ff",
+                        "on-primary-container": "#00626e",
+                        "surface-bright": "#333a3c",
+                        "surface-container-low": "#151d1e",
+                        "outline-variant": "#3b494c",
+                        "surface-container-lowest": "#080f11",
+                        "background": "#0d1516",
+                        "secondary-fixed-dim": "#c7c6cb",
+                        "inverse-primary": "#006875",
+                        "primary-fixed": "#9cf0ff",
+                        "inverse-on-surface": "#2a3233",
+                        "on-primary-fixed-variant": "#004f58",
+                        "on-tertiary-fixed": "#251a00",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary": "#2f3034",
+                        "tertiary": "#ffeac0",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "on-error": "#690005",
+                        "tertiary-container": "#fec931",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#6f5500",
+                        "on-tertiary": "#3e2e00",
+                        "on-primary": "#00363d",
+                        "on-surface": "#dce4e5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-margin": "24px",
+                        "gutter": "16px",
+                        "sidebar-width": "240px",
+                        "unit": "4px",
+                        "topbar-height": "56px"
+                    },
+                    "fontFamily": {
+                        "mono-sm": ["Geist"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Geist"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+            color: #dce4e5;
+        }
+        .card-border {
+            border: 1px solid #2C2C2E;
+        }
+        .card-bg {
+            background-color: #1C1C1E;
+        }
+        .input-bg {
+            background-color: #0A0A0B;
+        }
+        .btn-primary {
+            background-color: #00E5FF;
+            color: #0A0A0B;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #1C1C1E;
+            color: #F5F5F7;
+        }
+        .btn-ghost {
+            background-color: transparent;
+            color: #86868B;
+        }
+        .btn-ghost:hover {
+            color: #FFFFFF;
+        }
+        
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00E5FF;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00E5FF, 0 0 20px #00E5FF;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 229, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+        }
+        
+        .chart-bar {
+            background: linear-gradient(180deg, #00E5FF 0%, rgba(0, 229, 255, 0) 100%);
+            border-radius: 4px 4px 0 0;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .chart-bar:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="font-body-md antialiased overflow-hidden flex h-screen">
+<!-- SideNavBar (Suppressed for focused view/transactional results screen, but showing a collapsed version for tool context) -->
+<nav class="hidden md:flex flex-col h-full py-container-margin px-4 bg-surface-container dark:bg-surface-container docked h-screen w-[64px] border-r border-outline-variant left-0 items-center transition-all duration-200 ease-in-out z-20 shrink-0">
+<div class="mb-8">
+<img alt="CompanyOS Logo" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqKJI3LZQqq2lBh45YiA7ZqFTtTpcR9zs76Tiy75ae-PcRIJKJoK4Hxm-GinOD3ldNnIjBySWI7y47vwL4HWscxwhpH9TjOdgLCVv5H6eC1rVT7sDGth-g6INXaWWKLV-YKqm9eFELQZ3TvNVZnswo01KNaK9S0cCCd9AKoMZsUAuDiIo3yR7KzzygwVZKSyn2lL1ODDE0be_rBsrRHrZirRhEdpAe-UBpxwMh0Mt-AyJ4ASHB3pb7qg"/>
+</div>
+<div class="flex-1 flex flex-col gap-6 w-full items-center">
+<a class="text-outline hover:bg-surface-container-high hover:text-on-surface-variant p-2 rounded-lg flex justify-center w-full" href="#" title="Overview">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+</a>
+<a class="text-outline hover:bg-surface-container-high hover:text-on-surface-variant p-2 rounded-lg flex justify-center w-full" href="#" title="Company">
+<span class="material-symbols-outlined" data-icon="business">business</span>
+</a>
+<a class="text-on-surface bg-white/5 border-l-2 border-primary-container p-2 flex justify-center w-full" href="#" title="Research">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+</a>
+<a class="text-outline hover:bg-surface-container-high hover:text-on-surface-variant p-2 rounded-lg flex justify-center w-full" href="#" title="Finance">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-4 w-full items-center">
+<a class="text-outline hover:bg-surface-container-high hover:text-on-surface-variant p-2 rounded-lg flex justify-center w-full" href="#" title="Settings">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<!-- TopNavBar (Simplified for focused view) -->
+<header class="flex justify-between items-center px-container-margin w-full bg-surface/80 backdrop-blur-xl border-b border-outline-variant h-topbar-height shrink-0 z-10 sticky top-0">
+<div class="flex items-center gap-4">
+<a class="text-on-surface-variant hover:text-primary-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</a>
+<div class="flex items-center gap-2">
+<div class="pulse-dot"></div>
+<span class="font-label-md text-label-md text-on-surface-variant">Initiative Generated</span>
+</div>
+</div>
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface absolute left-1/2 transform -translate-x-1/2">
+                Coffee Startup Launch Plan
+            </h1>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary-container transition-colors duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<div class="flex-1 overflow-y-auto p-container-margin md:p-8 custom-scrollbar">
+<div class="max-w-6xl mx-auto space-y-6 pb-24">
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min">
+<!-- Executive Summary (Span 8) -->
+<div class="col-span-1 md:col-span-8 card-bg card-border rounded-xl p-6 flex flex-col relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-20">
+<span class="material-symbols-outlined text-[100px]" data-icon="lightbulb">lightbulb</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2 border-b border-[#2C2C2E] pb-2">
+<span class="material-symbols-outlined text-primary-container" data-icon="summarize">summarize</span>
+                            Executive Summary
+                        </h2>
+<div class="font-body-md text-body-md text-on-surface-variant space-y-4 relative z-10">
+<p>
+                                The proposed coffee startup, "BeanRush", targets urban professionals seeking high-quality, ethically sourced coffee with a focus on speed and technology-driven ordering. The primary differentiator is a proprietary mobile app that predicts user arrival times for seamless pickup, reducing wait times to zero.
+                            </p>
+<p>
+                                Initial launch is planned for the downtown financial district, targeting a high-foot-traffic location with minimal seating to maximize throughput. The model emphasizes high margin espresso-based drinks and strategic partnerships with local artisanal bakeries.
+                            </p>
+</div>
+</div>
+<!-- Estimated Investment (Span 4) -->
+<div class="col-span-1 md:col-span-4 card-bg card-border rounded-xl p-6 flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2 border-b border-[#2C2C2E] pb-2">
+<span class="material-symbols-outlined text-primary-container" data-icon="account_balance_wallet">account_balance_wallet</span>
+                            Estimated Investment
+                        </h2>
+<div class="flex-1 flex flex-col justify-center items-center">
+<div class="font-display-lg text-display-lg text-primary-container mb-2">$250k</div>
+<div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Initial Capital Required</div>
+</div>
+<div class="mt-4 space-y-2">
+<div class="flex justify-between font-mono-sm text-mono-sm">
+<span class="text-on-surface-variant">Equipment</span>
+<span class="text-on-surface">$85,000</span>
+</div>
+<div class="flex justify-between font-mono-sm text-mono-sm">
+<span class="text-on-surface-variant">Buildout</span>
+<span class="text-on-surface">$110,000</span>
+</div>
+<div class="flex justify-between font-mono-sm text-mono-sm">
+<span class="text-on-surface-variant">Working Capital</span>
+<span class="text-on-surface">$55,000</span>
+</div>
+</div>
+</div>
+<!-- Market Opportunity (Span 6) -->
+<div class="col-span-1 md:col-span-6 card-bg card-border rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2 border-b border-[#2C2C2E] pb-2">
+<span class="material-symbols-outlined text-primary-container" data-icon="pie_chart">pie_chart</span>
+                            Market Opportunity
+                        </h2>
+<div class="flex items-start gap-4">
+<div class="flex-1 space-y-4 font-body-md text-body-md text-on-surface-variant">
+<p>The specialty coffee market in the target urban zone is growing at 7.2% CAGR. Current saturation is high for traditional sit-down cafes, but low for tech-enabled 'grab-and-go' models.</p>
+<ul class="list-disc pl-4 space-y-1">
+<li>TAM: $45M (Local District)</li>
+<li>SAM: $12M (Premium Grab-and-Go)</li>
+<li>SOM: $1.5M (Year 1 Target)</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Target Customers (Span 6) -->
+<div class="col-span-1 md:col-span-6 card-bg card-border rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2 border-b border-[#2C2C2E] pb-2">
+<span class="material-symbols-outlined text-primary-container" data-icon="group">group</span>
+                            Target Customers
+                        </h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-3 bg-surface-container rounded-lg border border-outline-variant/30">
+<div class="font-label-md text-label-md text-primary-container mb-1">Primary</div>
+<div class="font-body-md text-body-md text-on-surface">Corporate Professionals (25-45)</div>
+<div class="font-mono-sm text-mono-sm text-on-surface-variant mt-2">Time-poor, high disposable income. Values speed over ambiance.</div>
+</div>
+<div class="p-3 bg-surface-container rounded-lg border border-outline-variant/30">
+<div class="font-label-md text-label-md text-tertiary-container mb-1">Secondary</div>
+<div class="font-body-md text-body-md text-on-surface">Tech Workers</div>
+<div class="font-mono-sm text-mono-sm text-on-surface-variant mt-2">Appreciates digital integration, quality sourcing, and loyalty programs.</div>
+</div>
+</div>
+</div>
+<!-- Revenue Projection (Span 12) -->
+<div class="col-span-1 md:col-span-12 card-bg card-border rounded-xl p-6">
+<div class="flex justify-between items-center border-b border-[#2C2C2E] pb-2 mb-6">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container" data-icon="trending_up">trending_up</span>
+                                Revenue Projection (Y1-Y3)
+                            </h2>
+<div class="font-mono-sm text-mono-sm text-on-surface-variant">Data based on baseline foot traffic models</div>
+</div>
+<!-- Simple CSS Chart Representation -->
+<div class="h-64 flex items-end justify-between gap-4 px-8 pb-8 pt-4 border-l border-b border-outline-variant/50 relative">
+<!-- Grid lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none pb-8 pl-8">
+<div class="w-full border-t border-outline-variant/10"></div>
+<div class="w-full border-t border-outline-variant/10"></div>
+<div class="w-full border-t border-outline-variant/10"></div>
+<div class="w-full border-t border-outline-variant/10"></div>
+</div>
+<!-- Bars -->
+<div class="flex flex-col items-center w-full group">
+<div class="chart-bar w-16 h-[30%] group-hover:h-[35%] transition-all relative">
+<div class="absolute -top-6 left-1/2 transform -translate-x-1/2 font-mono-sm text-mono-sm text-on-surface opacity-0 group-hover:opacity-100 transition-opacity">$450k</div>
+</div>
+<span class="mt-4 font-label-md text-label-md text-on-surface-variant">Year 1</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="chart-bar w-16 h-[60%] group-hover:h-[65%] transition-all relative">
+<div class="absolute -top-6 left-1/2 transform -translate-x-1/2 font-mono-sm text-mono-sm text-on-surface opacity-0 group-hover:opacity-100 transition-opacity">$900k</div>
+</div>
+<span class="mt-4 font-label-md text-label-md text-on-surface-variant">Year 2</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="chart-bar w-16 h-[90%] group-hover:h-[95%] transition-all relative">
+<div class="absolute -top-6 left-1/2 transform -translate-x-1/2 font-mono-sm text-mono-sm text-on-surface opacity-0 group-hover:opacity-100 transition-opacity">$1.35M</div>
+</div>
+<span class="mt-4 font-label-md text-label-md text-on-surface-variant">Year 3</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Action Bar (Fixed) -->
+<div class="absolute bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-outline-variant p-4 z-30">
+<div class="max-w-6xl mx-auto flex justify-between items-center">
+<div class="flex gap-4">
+<button class="btn-ghost font-label-md text-label-md px-4 py-2 rounded flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                        Export
+                    </button>
+<button class="btn-ghost font-label-md text-label-md px-4 py-2 rounded flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+                        Save
+                    </button>
+</div>
+<button class="btn-primary font-label-md text-label-md px-6 py-3 rounded-sm flex items-center gap-2 hover:bg-primary-fixed transition-colors font-semibold">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+                    Ask CompanyOS
+                </button>
+</div>
+</div>
+</main>
+</body></html>

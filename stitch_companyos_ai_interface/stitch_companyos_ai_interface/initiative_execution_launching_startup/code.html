@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Initiative Execution - CompanyOS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#dce4e5",
+                      "surface-tint": "#00daf3",
+                      "surface-variant": "#2e3638",
+                      "on-surface-variant": "#bac9cc",
+                      "on-secondary-fixed": "#1a1b1f",
+                      "surface-container-highest": "#2e3638",
+                      "surface-container-high": "#242b2d",
+                      "secondary-fixed": "#e3e2e7",
+                      "primary-container": "#00e5ff",
+                      "error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#46464b",
+                      "on-tertiary-fixed-variant": "#594400",
+                      "surface-dim": "#0d1516",
+                      "outline": "#849396",
+                      "secondary-container": "#46464b",
+                      "surface-container": "#192122",
+                      "error": "#ffb4ab",
+                      "primary-fixed-dim": "#00daf3",
+                      "on-secondary-container": "#b5b4ba",
+                      "tertiary-fixed": "#ffdf96",
+                      "on-background": "#dce4e5",
+                      "secondary": "#c7c6cb",
+                      "surface": "#0d1516",
+                      "primary": "#c3f5ff",
+                      "on-primary-container": "#00626e",
+                      "surface-bright": "#333a3c",
+                      "surface-container-low": "#151d1e",
+                      "outline-variant": "#3b494c",
+                      "surface-container-lowest": "#080f11",
+                      "background": "#0d1516",
+                      "secondary-fixed-dim": "#c7c6cb",
+                      "inverse-primary": "#006875",
+                      "primary-fixed": "#9cf0ff",
+                      "inverse-on-surface": "#2a3233",
+                      "on-primary-fixed-variant": "#004f58",
+                      "on-tertiary-fixed": "#251a00",
+                      "on-primary-fixed": "#001f24",
+                      "on-secondary": "#2f3034",
+                      "tertiary": "#ffeac0",
+                      "tertiary-fixed-dim": "#f3bf26",
+                      "on-error": "#690005",
+                      "tertiary-container": "#fec931",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary-container": "#6f5500",
+                      "on-tertiary": "#3e2e00",
+                      "on-primary": "#00363d",
+                      "on-surface": "#dce4e5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-margin": "24px",
+                      "gutter": "16px",
+                      "sidebar-width": "240px",
+                      "unit": "4px",
+                      "topbar-height": "56px"
+              },
+              "fontFamily": {
+                      "mono-sm": [
+                              "Geist"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "mono-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shell Container -->
+<div class="flex h-screen overflow-hidden relative">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-container-margin px-4 docked h-screen w-sidebar-width left-0 border-r border-outline-variant bg-surface-container dark:bg-surface-container flat no shadows z-20">
+<!-- Header -->
+<div class="flex items-center gap-3 mb-8 px-2">
+<img alt="CompanyOS Logo" class="w-8 h-8 rounded-sm object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqKJI3LZQqq2lBh45YiA7ZqFTtTpcR9zs76Tiy75ae-PcRIJKJoK4Hxm-GinOD3ldNnIjBySWI7y47vwL4HWscxwhpH9TjOdgLCVv5H6eC1rVT7sDGth-g6INXaWWKLV-YKqm9eFELQZ3TvNVZnswo01KNaK9S0cCCd9AKoMZsUAuDiIo3yR7KzzygwVZKSyn2lL1ODDE0be_rBsrRHrZirRhEdpAe-UBpxwMh0Mt-AyJ4ASHB3pb7qg"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">CompanyOS</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">BeanRush Coffee</p>
+</div>
+</div>
+<!-- Tabs -->
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-on-surface bg-white/5 border-l-2 border-primary-container font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-outline hover:bg-surface-container-high hover:text-on-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">business</span>
+<span>Company</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-outline hover:bg-surface-container-high hover:text-on-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span>Departments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-outline hover:bg-surface-container-high hover:text-on-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span>Research</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-outline hover:bg-surface-container-high hover:text-on-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Finance</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-outline hover:bg-surface-container-high hover:text-on-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span>Marketing</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-outline hover:bg-surface-container-high hover:text-on-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span>Sales</span>
+</a>
+</div>
+<!-- CTA -->
+<div class="mt-4 mb-8">
+<button class="w-full flex items-center justify-center gap-2 py-2 px-4 bg-primary-container text-on-primary-container rounded-sm font-label-md text-label-md hover:bg-primary transition-colors">
+                    + New Initiative
+                </button>
+</div>
+<!-- Footer Tabs -->
+<div class="space-y-1 mt-auto pt-4 border-t border-outline-variant/30">
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-outline hover:bg-surface-container-high hover:text-on-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ease-in-out text-outline hover:bg-surface-container-high hover:text-on-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-container-margin w-full docked full-width top-0 h-topbar-height border-b border-outline-variant bg-surface/80 backdrop-blur-xl flat no shadows z-10 text-primary dark:text-primary-container font-label-md text-label-md transition-colors duration-150">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface">Overview</h2>
+</div>
+<div class="flex items-center gap-4">
+<!-- Search Bar (Right) -->
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container border border-outline-variant rounded-full pl-9 pr-4 py-1.5 text-body-md font-body-md focus:border-primary-container focus:ring-0 focus:outline-none w-64 transition-colors" placeholder="Search..." type="text"/>
+</div>
+<!-- Trailing Icons -->
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full text-on-surface-variant hover:text-primary-container transition-colors duration-150 hover:bg-surface-container-high">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<!-- Profile -->
+<div class="h-8 w-8 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden flex-shrink-0 cursor-pointer">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A highly detailed close-up portrait of a professional individual serving as a user avatar. The subject is well-lit with soft, natural studio lighting against a clean, dark, minimalist background. The aesthetic is modern and corporate, aligning perfectly with a high-fidelity digital interface. Sharp focus on the face." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYBk43vhgipqeP6c_OTivVuV9fqDvcorYvfUG5fwS9LgI5hKaejHiCnN2nmPmCX5m5GWH0z8kCFeOnvEE_qn4NtXTF961mR8cUnUi4lnz9ZZSvSSsZs-2olkDpeohHPjZsRocBucoALW2E1p2LhJtn-mPr7wMDlwGU78evO0UZwPtrZf7q9MJrQ_FFd2ugpneRKTXg5x8YVEVLBKfHVslLaZurkVl9mFHoSacnJVun1xXpbT6JAvFlKg"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-container-margin relative scroll-smooth">
+<!-- Background Ambient effect -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary-container/5 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+<div class="max-w-6xl mx-auto space-y-8">
+<!-- Execution Header -->
+<div class="flex flex-col items-center justify-center text-center space-y-4 py-12">
+<div class="relative w-16 h-16 flex items-center justify-center">
+<!-- Nucleus / Loading Indicator -->
+<div class="absolute inset-0 rounded-full border-2 border-primary-container/20 border-t-primary-container animate-spin" style="animation-duration: 3s;"></div>
+<img alt="CompanyOS Nucleus" class="w-10 h-10 rounded-sm opacity-80 z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqKJI3LZQqq2lBh45YiA7ZqFTtTpcR9zs76Tiy75ae-PcRIJKJoK4Hxm-GinOD3ldNnIjBySWI7y47vwL4HWscxwhpH9TjOdgLCVv5H6eC1rVT7sDGth-g6INXaWWKLV-YKqm9eFELQZ3TvNVZnswo01KNaK9S0cCCd9AKoMZsUAuDiIo3yR7KzzygwVZKSyn2lL1ODDE0be_rBsrRHrZirRhEdpAe-UBpxwMh0Mt-AyJ4ASHB3pb7qg"/>
+<!-- AI Status Glow -->
+<div class="absolute inset-0 bg-primary-container/10 blur-xl rounded-full animate-pulse"></div>
+</div>
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Launching Coffee Startup</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant flex items-center justify-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.6)]"></span>
+                                CompanyOS is coordinating your team.
+                            </p>
+</div>
+</div>
+<!-- Grid Layout for Agents and Feed -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Agent Status List -->
+<div class="lg:col-span-7 bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl p-6 flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 border-b border-[#2C2C2E] pb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">psychology</span>
+                                Agent Coordination
+                            </h3>
+<div class="space-y-4 flex-1">
+<!-- Agent Item: Completed -->
+<div class="flex items-start gap-4 p-4 rounded-lg bg-surface-container/50 border border-outline-variant/30 transition-all hover:border-outline-variant">
+<div class="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">CEO Agent</span>
+<span class="text-mono-sm font-mono-sm text-outline px-2 py-0.5 rounded-full bg-surface-container-highest">Completed</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Planning initiative</p>
+</div>
+</div>
+<!-- Agent Item: Completed -->
+<div class="flex items-start gap-4 p-4 rounded-lg bg-surface-container/50 border border-outline-variant/30 transition-all hover:border-outline-variant">
+<div class="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Research Agent</span>
+<span class="text-mono-sm font-mono-sm text-outline px-2 py-0.5 rounded-full bg-surface-container-highest">Completed</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Analyzing coffee market</p>
+</div>
+</div>
+<!-- Agent Item: In Progress -->
+<div class="flex items-start gap-4 p-4 rounded-lg bg-surface-container/80 border border-primary-container/30 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+<div class="mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.6)]"></div>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Finance Agent</span>
+<span class="text-mono-sm font-mono-sm text-primary-container px-2 py-0.5 rounded-full bg-primary-container/10 border border-primary-container/20 animate-pulse">In Progress</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Creating financial projection</p>
+</div>
+</div>
+<!-- Agent Item: In Progress -->
+<div class="flex items-start gap-4 p-4 rounded-lg bg-surface-container/80 border border-primary-container/30 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+<div class="mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.6)]"></div>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Marketing Agent</span>
+<span class="text-mono-sm font-mono-sm text-primary-container px-2 py-0.5 rounded-full bg-primary-container/10 border border-primary-container/20 animate-pulse">In Progress</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Developing brand strategy</p>
+</div>
+</div>
+<!-- Agent Item: Queued -->
+<div class="flex items-start gap-4 p-4 rounded-lg border border-outline-variant/20 opacity-60">
+<div class="mt-1 flex-shrink-0 w-6 h-6 rounded-full border border-outline-variant flex items-center justify-center">
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Sales Agent</span>
+<span class="text-mono-sm font-mono-sm text-outline px-2 py-0.5 rounded-full border border-outline-variant/30">Queued</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Preparing go-to-market plan</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Activity Feed -->
+<div class="lg:col-span-5 bg-[#1C1C1E] border border-[#2C2C2E] rounded-xl p-6 flex flex-col h-full max-h-[600px]">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 border-b border-[#2C2C2E] pb-4 flex items-center gap-2 justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">history</span>
+                                    Live Feed
+                                </div>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary-container"></span>
+</span>
+</h3>
+<div class="flex-1 overflow-y-auto pr-2 space-y-6 relative before:absolute before:inset-0 before:ml-[11px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-outline-variant/50 before:to-transparent pb-4">
+<!-- Feed Item -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+<!-- Icon -->
+<div class="flex items-center justify-center w-6 h-6 rounded-full border border-[#2C2C2E] bg-[#1C1C1E] text-outline shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+<div class="w-1.5 h-1.5 rounded-full bg-primary-container shadow-[0_0_5px_rgba(0,229,255,0.8)]"></div>
+</div>
+<!-- Content -->
+<div class="w-[calc(100%-2.5rem)] md:w-[calc(50%-1.5rem)] p-3 rounded-lg border border-primary-container/30 bg-primary-container/5">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md font-bold text-primary-container">Marketing Agent</span>
+<time class="font-mono-sm text-mono-sm text-outline">14:15</time>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Generating target demographics analysis.</p>
+</div>
+</div>
+<!-- Feed Item -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<!-- Icon -->
+<div class="flex items-center justify-center w-6 h-6 rounded-full border border-[#2C2C2E] bg-[#1C1C1E] text-outline shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+</div>
+<!-- Content -->
+<div class="w-[calc(100%-2.5rem)] md:w-[calc(50%-1.5rem)] p-3 rounded-lg border border-[#2C2C2E] bg-surface-container/30">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Finance Agent</span>
+<time class="font-mono-sm text-mono-sm text-outline">14:12</time>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Started compiling initial cost estimates.</p>
+</div>
+</div>
+<!-- Feed Item -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<!-- Icon -->
+<div class="flex items-center justify-center w-6 h-6 rounded-full border border-[#2C2C2E] bg-[#1C1C1E] text-outline shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+<span class="material-symbols-outlined text-[12px] text-primary-container">check</span>
+</div>
+<!-- Content -->
+<div class="w-[calc(100%-2.5rem)] md:w-[calc(50%-1.5rem)] p-3 rounded-lg border border-[#2C2C2E] bg-surface-container/30">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">Research Agent</span>
+<time class="font-mono-sm text-mono-sm text-outline">14:08</time>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Completed comprehensive competitor analysis report.</p>
+</div>
+</div>
+<!-- Feed Item -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<!-- Icon -->
+<div class="flex items-center justify-center w-6 h-6 rounded-full border border-[#2C2C2E] bg-[#1C1C1E] text-outline shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+<span class="material-symbols-outlined text-[12px] text-primary-container">check</span>
+</div>
+<!-- Content -->
+<div class="w-[calc(100%-2.5rem)] md:w-[calc(50%-1.5rem)] p-3 rounded-lg border border-[#2C2C2E] bg-surface-container/30">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">CEO Agent</span>
+<time class="font-mono-sm text-mono-sm text-outline">14:02</time>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">CEO Agent created execution plan.</p>
+</div>
+</div>
+<!-- Feed Item -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<!-- Icon -->
+<div class="flex items-center justify-center w-6 h-6 rounded-full border border-[#2C2C2E] bg-[#1C1C1E] text-outline shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+<span class="material-symbols-outlined text-[12px] text-primary-container">rocket_launch</span>
+</div>
+<!-- Content -->
+<div class="w-[calc(100%-2.5rem)] md:w-[calc(50%-1.5rem)] p-3 rounded-lg border border-[#2C2C2E] bg-surface-container/30">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md font-bold text-on-surface">System</span>
+<time class="font-mono-sm text-mono-sm text-outline">14:00</time>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Initiative "Launching Coffee Startup" initialized.</p>
+</div>
+</div>
+</div>
+<!-- Fade out bottom of feed -->
+<div class="absolute bottom-6 left-6 right-6 h-12 bg-gradient-to-t from-[#1C1C1E] to-transparent pointer-events-none rounded-b-xl"></div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

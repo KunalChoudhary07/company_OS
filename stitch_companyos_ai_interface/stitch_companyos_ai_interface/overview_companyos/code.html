@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CompanyOS - Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#dce4e5",
+                        "surface-tint": "#00daf3",
+                        "surface-variant": "#2e3638",
+                        "on-surface-variant": "#bac9cc",
+                        "on-secondary-fixed": "#1a1b1f",
+                        "surface-container-highest": "#2e3638",
+                        "surface-container-high": "#242b2d",
+                        "secondary-fixed": "#e3e2e7",
+                        "primary-container": "#00e5ff",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#46464b",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "surface-dim": "#0d1516",
+                        "outline": "#849396",
+                        "secondary-container": "#46464b",
+                        "surface-container": "#192122",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#00daf3",
+                        "on-secondary-container": "#b5b4ba",
+                        "tertiary-fixed": "#ffdf96",
+                        "on-background": "#dce4e5",
+                        "secondary": "#c7c6cb",
+                        "surface": "#0d1516",
+                        "primary": "#c3f5ff",
+                        "on-primary-container": "#00626e",
+                        "surface-bright": "#333a3c",
+                        "surface-container-low": "#151d1e",
+                        "outline-variant": "#3b494c",
+                        "surface-container-lowest": "#080f11",
+                        "background": "#0d1516",
+                        "secondary-fixed-dim": "#c7c6cb",
+                        "inverse-primary": "#006875",
+                        "primary-fixed": "#9cf0ff",
+                        "inverse-on-surface": "#2a3233",
+                        "on-primary-fixed-variant": "#004f58",
+                        "on-tertiary-fixed": "#251a00",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary": "#2f3034",
+                        "tertiary": "#ffeac0",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "on-error": "#690005",
+                        "tertiary-container": "#fec931",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#6f5500",
+                        "on-tertiary": "#3e2e00",
+                        "on-primary": "#00363d",
+                        "on-surface": "#dce4e5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-margin": "24px",
+                        "gutter": "16px",
+                        "sidebar-width": "240px",
+                        "unit": "4px",
+                        "topbar-height": "56px"
+                    },
+                    "fontFamily": {
+                        "mono-sm": ["Geist"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Geist"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    },
+                    "animation": {
+                        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+        }
+        .jarvis-orb {
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.1), inset 0 0 20px rgba(0, 229, 255, 0.05);
+        }
+        .jarvis-ring {
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            animation: spin 60s linear infinite;
+        }
+        .jarvis-ring-inner {
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            animation: spin-reverse 40s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+    </style>
+</head>
+<body class="text-on-surface font-body-md bg-background antialiased h-screen overflow-hidden flex selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex bg-surface-container dark:bg-surface-container font-body-md text-body-md docked h-screen w-sidebar-width left-0 border-r border-outline-variant flex-col h-full py-container-margin px-4 z-20">
+<!-- Brand / Header -->
+<div class="flex items-center gap-3 mb-8 px-2">
+<img alt="CompanyOS Logo" class="w-8 h-8 rounded-sm object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqKJI3LZQqq2lBh45YiA7ZqFTtTpcR9zs76Tiy75ae-PcRIJKJoK4Hxm-GinOD3ldNnIjBySWI7y47vwL4HWscxwhpH9TjOdgLCVv5H6eC1rVT7sDGth-g6INXaWWKLV-YKqm9eFELQZ3TvNVZnswo01KNaK9S0cCCd9AKoMZsUAuDiIo3yR7KzzygwVZKSyn2lL1ODDE0be_rBsrRHrZirRhEdpAe-UBpxwMh0Mt-AyJ4ASHB3pb7qg"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">CompanyOS</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">BeanRush Coffee</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface bg-white/5 border-l-2 border-primary-container transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-primary-container">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-outline hover:bg-surface-container-high hover:text-on-surface-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">business</span>
+<span>Company</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-outline hover:bg-surface-container-high hover:text-on-surface-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span>Departments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-outline hover:bg-surface-container-high hover:text-on-surface-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span>Research</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-outline hover:bg-surface-container-high hover:text-on-surface-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Finance</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-outline hover:bg-surface-container-high hover:text-on-surface-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span>Marketing</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-outline hover:bg-surface-container-high hover:text-on-surface-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span>Sales</span>
+</a>
+</nav>
+<!-- CTA & Footer -->
+<div class="mt-auto space-y-4 pt-4 border-t border-outline-variant/30">
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-2 px-4 rounded-DEFAULT font-medium hover:bg-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                + New Initiative
+            </button>
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-outline hover:bg-surface-container-high hover:text-on-surface-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-outline hover:bg-surface-container-high hover:text-on-surface-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface/80 backdrop-blur-xl font-label-md text-label-md docked full-width top-0 h-topbar-height border-b border-outline-variant flex justify-between items-center px-container-margin w-full z-10 sticky">
+<div class="flex items-center gap-4">
+<div class="md:hidden">
+<img alt="CompanyOS Logo" class="w-6 h-6 rounded-sm object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqKJI3LZQqq2lBh45YiA7ZqFTtTpcR9zs76Tiy75ae-PcRIJKJoK4Hxm-GinOD3ldNnIjBySWI7y47vwL4HWscxwhpH9TjOdgLCVv5H6eC1rVT7sDGth-g6INXaWWKLV-YKqm9eFELQZ3TvNVZnswo01KNaK9S0cCCd9AKoMZsUAuDiIo3yR7KzzygwVZKSyn2lL1ODDE0be_rBsrRHrZirRhEdpAe-UBpxwMh0Mt-AyJ4ASHB3pb7qg"/>
+</div>
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface hidden md:block">Overview</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="bg-[#1C1C1E] border border-[#2C2C2E] text-on-surface rounded-DEFAULT py-1.5 pl-9 pr-4 text-sm focus:border-primary-container focus:ring-0 focus:outline-none transition-colors w-64 placeholder:text-outline" placeholder="Search..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-primary-container transition-colors duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a user in a dark, moody corporate setting, dramatic lighting, high quality, 8k resolution, photorealistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD34iWeWH2L9ZmWjUNAQ2hQKI88DvyxHWJRi2JmxilcECORbDN15igqqYk6vV4bMiQZpi6KsnwA50CKfvinjVqERyI1UEK7n7UsjzIlFckRQs-na17GeS3MRIcagt1LTYPr-g67hxugPlLIFG3ersmOHvekjXNksWMMBIFglXnBRzrLOeu8KyQZA7TIg3-TfdD8YCkGpr7d8EmKmahQgWS6mF4ktTf5cxBa_z9O2Xaf7FaAsxywVb-jA"/>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 overflow-y-auto p-container-margin md:p-8 flex flex-col xl:flex-row gap-8 relative z-0">
+<!-- Central Interaction Area -->
+<section class="flex-1 flex flex-col items-center justify-center min-h-[600px]">
+<div class="text-center mb-12 animate-fade-in-up">
+<p class="font-mono-sm text-mono-sm text-outline uppercase tracking-widest mb-4">GOOD MORNING, SAHIL</p>
+<h2 class="font-display-lg text-display-lg text-on-surface">What would you like to know?</h2>
+</div>
+<!-- Jarvis Orb -->
+<div class="relative w-64 h-64 flex items-center justify-center mb-12 group">
+<!-- Outer Decorative Rings -->
+<div class="absolute inset-0 rounded-full jarvis-ring"></div>
+<div class="absolute inset-4 rounded-full jarvis-ring-inner"></div>
+<!-- Core Orb -->
+<button class="relative z-10 w-32 h-32 rounded-full bg-[#1C1C1E] border border-[#2C2C2E] flex flex-col items-center justify-center jarvis-orb hover:border-primary-container transition-colors duration-300 group-hover:scale-105">
+<!-- Pulse Indicator -->
+<div class="absolute inset-0 rounded-full bg-primary-container/10 animate-pulse-slow"></div>
+<span class="material-symbols-outlined text-primary-container text-4xl mb-1" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="font-label-md text-label-md text-primary-container">Speak naturally</span>
+</button>
+<!-- Status Text -->
+<div class="absolute -bottom-8 font-mono-sm text-mono-sm text-outline transition-opacity duration-300">
+                        Ready when you are
+                    </div>
+</div>
+<!-- Suggested Actions Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl">
+<button class="bg-[#1C1C1E] border border-[#2C2C2E] p-4 rounded-lg flex flex-col items-center justify-center gap-3 hover:border-primary-container/50 hover:bg-[#242b2d] transition-all group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary-container transition-colors">payments</span>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Review finances</span>
+</button>
+<button class="bg-[#1C1C1E] border border-[#2C2C2E] p-4 rounded-lg flex flex-col items-center justify-center gap-3 hover:border-primary-container/50 hover:bg-[#242b2d] transition-all group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary-container transition-colors">query_stats</span>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Analyze competitors</span>
+</button>
+<button class="bg-[#1C1C1E] border border-[#2C2C2E] p-4 rounded-lg flex flex-col items-center justify-center gap-3 hover:border-primary-container/50 hover:bg-[#242b2d] transition-all group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary-container transition-colors">checklist</span>
+<span class="font-body-md text-body-md text-on-surface-variant group-hover:text-on-surface transition-colors">Show today's priorities</span>
+</button>
+</div>
+</section>
+<!-- Sidebar / Activity Panel -->
+<aside class="w-full xl:w-80 flex flex-col gap-6">
+<div class="flex items-center justify-between border-b border-[#2C2C2E] pb-2">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">CompanyOS Activity</h3>
+<div class="w-2 h-2 rounded-full bg-primary-container animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.8)]"></div>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Agent Card 1 -->
+<div class="bg-[#1C1C1E] border border-[#2C2C2E] rounded-lg p-4 flex gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden">
+<span class="material-symbols-outlined text-primary-container text-sm">person</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface font-semibold">CEO Agent</span>
+<span class="font-mono-sm text-[10px] text-primary-container bg-primary-container/10 px-1.5 py-0.5 rounded-sm">IDLE</span>
+</div>
+<p class="font-body-md text-xs text-on-surface-variant leading-tight">Waiting for next command sequence.</p>
+</div>
+</div>
+<!-- Agent Card 2 -->
+<div class="bg-[#1C1C1E] border border-[#2C2C2E] rounded-lg p-4 flex gap-4 relative overflow-hidden">
+<!-- Progress indicator for active agent -->
+<div class="absolute bottom-0 left-0 h-0.5 bg-primary-container/50 w-1/3"></div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-primary-container/30 flex items-center justify-center shrink-0 overflow-hidden">
+<span class="material-symbols-outlined text-outline text-sm animate-spin-slow" style="animation: spin 10s linear infinite;">explore</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Research Agent</span>
+<span class="font-mono-sm text-[10px] text-tertiary-fixed-dim bg-tertiary-fixed-dim/10 px-1.5 py-0.5 rounded-sm flex items-center gap-1"><span class="w-1 h-1 bg-tertiary-fixed-dim rounded-full animate-pulse"></span>ACTIVE</span>
+</div>
+<p class="font-body-md text-xs text-on-surface-variant leading-tight">Compiling Q3 market share analysis for BeanRush.</p>
+</div>
+</div>
+<!-- Agent Card 3 -->
+<div class="bg-[#1C1C1E] border border-[#2C2C2E] rounded-lg p-4 flex gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden">
+<span class="material-symbols-outlined text-primary-container text-sm">payments</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Finance Agent</span>
+<span class="font-mono-sm text-[10px] text-outline bg-outline/10 px-1.5 py-0.5 rounded-sm">SLEEP</span>
+</div>
+<p class="font-body-md text-xs text-on-surface-variant leading-tight">Last sync: 2 hours ago.</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

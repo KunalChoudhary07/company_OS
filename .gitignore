@@ -1,0 +1,59 @@
+# ─── Secrets — NEVER commit these ────────────────────────────────────────────
+# .env holds live API keys (Groq, Tavily). Only .env.example is safe to share.
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ─── Virtual environments ────────────────────────────────────────────────────
+venv/
+env/
+ENV/
+.venv/
+
+# ─── Database / runtime state ────────────────────────────────────────────────
+# Generated at runtime; contains locally generated company data.
+storage/*.db
+storage/*.sqlite
+storage/*.sqlite3
+*.db-journal
+
+# ─── Large / third-party datasets ────────────────────────────────────────────
+# registered_companies.csv is a ~565 MB MCA registry dump containing real
+# company records and email addresses. GitHub rejects files >100 MB, and this
+# is third-party data that shouldn't be redistributed in the repo.
+registered_companies.csv/
+
+# ─── Editor / OS ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ─── Logs / temp ─────────────────────────────────────────────────────────────
+*.log
+logs/
+tmp/
+temp/

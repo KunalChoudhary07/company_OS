@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CompanyOS - New Initiative</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#dce4e5",
+                        "surface-tint": "#00daf3",
+                        "surface-variant": "#2e3638",
+                        "on-surface-variant": "#bac9cc",
+                        "on-secondary-fixed": "#1a1b1f",
+                        "surface-container-highest": "#2e3638",
+                        "surface-container-high": "#242b2d",
+                        "secondary-fixed": "#e3e2e7",
+                        "primary-container": "#00e5ff",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#46464b",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "surface-dim": "#0d1516",
+                        "outline": "#849396",
+                        "secondary-container": "#46464b",
+                        "surface-container": "#192122",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#00daf3",
+                        "on-secondary-container": "#b5b4ba",
+                        "tertiary-fixed": "#ffdf96",
+                        "on-background": "#dce4e5",
+                        "secondary": "#c7c6cb",
+                        "surface": "#0d1516",
+                        "primary": "#c3f5ff",
+                        "on-primary-container": "#00626e",
+                        "surface-bright": "#333a3c",
+                        "surface-container-low": "#151d1e",
+                        "outline-variant": "#3b494c",
+                        "surface-container-lowest": "#080f11",
+                        "background": "#0d1516",
+                        "secondary-fixed-dim": "#c7c6cb",
+                        "inverse-primary": "#006875",
+                        "primary-fixed": "#9cf0ff",
+                        "inverse-on-surface": "#2a3233",
+                        "on-primary-fixed-variant": "#004f58",
+                        "on-tertiary-fixed": "#251a00",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary": "#2f3034",
+                        "tertiary": "#ffeac0",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "on-error": "#690005",
+                        "tertiary-container": "#fec931",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#6f5500",
+                        "on-tertiary": "#3e2e00",
+                        "on-primary": "#00363d",
+                        "on-surface": "#dce4e5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-margin": "24px",
+                        "gutter": "16px",
+                        "sidebar-width": "240px",
+                        "unit": "4px",
+                        "topbar-height": "56px"
+                    },
+                    "fontFamily": {
+                        "mono-sm": ["Geist"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Geist"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #0A0A0B; color: #dce4e5; }
+        .glass-panel { background: rgba(28, 28, 30, 0.6); backdrop-filter: blur(20px); border: 1px solid #2C2C2E; }
+        .glow-focus:focus-within { border-color: #00E5FF; box-shadow: 0 0 12px rgba(0, 229, 255, 0.2); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center font-body-md overflow-hidden antialiased">
+<!-- Background Elements -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-container/20 via-background to-background"></div>
+<!-- Main Modal Canvas -->
+<main class="w-full max-w-3xl px-container-margin z-10">
+<div class="glass-panel rounded-xl p-8 md:p-12 shadow-2xl flex flex-col gap-8 transform transition-all duration-300 hover:scale-[1.01]">
+<!-- Header Section -->
+<header class="flex flex-col items-center gap-6 mb-4">
+<img alt="CompanyOS Logo" class="w-16 h-16 object-contain filter drop-shadow-[0_0_8px_rgba(0,229,255,0.3)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqKJI3LZQqq2lBh45YiA7ZqFTtTpcR9zs76Tiy75ae-PcRIJKJoK4Hxm-GinOD3ldNnIjBySWI7y47vwL4HWscxwhpH9TjOdgLCVv5H6eC1rVT7sDGth-g6INXaWWKLV-YKqm9eFELQZ3TvNVZnswo01KNaK9S0cCCd9AKoMZsUAuDiIo3yR7KzzygwVZKSyn2lL1ODDE0be_rBsrRHrZirRhEdpAe-UBpxwMh0Mt-AyJ4ASHB3pb7qg"/>
+<div class="text-center">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Create a new initiative</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mx-auto">
+                        CompanyOS will automatically coordinate: Research, Finance, Marketing, Sales
+                    </p>
+</div>
+</header>
+<!-- Input Section -->
+<div class="w-full relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary-container/30 to-transparent rounded-lg blur opacity-25 group-focus-within:opacity-100 transition duration-500"></div>
+<div class="relative flex items-center bg-[#0A0A0B] border border-[#2C2C2E] rounded-lg p-1 glow-focus transition-all duration-300">
+<span class="material-symbols-outlined text-outline ml-4 mr-2">rocket_launch</span>
+<input autofocus="" class="w-full bg-transparent border-none text-on-surface font-headline-md text-headline-md focus:ring-0 placeholder:text-outline/50 py-4 px-2" placeholder="Launch a coffee startup in Chandigarh" type="text"/>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-center gap-4 mt-6">
+<button class="px-8 py-3 rounded-DEFAULT font-label-md text-label-md bg-transparent border border-[#1C1C1E] text-on-surface hover:bg-white/5 transition-colors duration-200">
+                    Cancel
+                </button>
+<button class="px-8 py-3 rounded-DEFAULT font-label-md text-label-md bg-[#00E5FF] text-[#0A0A0B] font-bold hover:bg-primary transition-colors duration-200 shadow-[0_0_16px_rgba(0,229,255,0.3)] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]">
+                    Start Initiative
+                </button>
+</div>
+<!-- AI Status Indicator (Decorative) -->
+<div class="absolute bottom-4 right-4 flex items-center gap-2 text-outline/50 font-mono-sm text-mono-sm">
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(0,229,255,0.6)] animate-pulse"></div>
+                System Ready
+            </div>
+</div>
+</main>
+</body></html>
