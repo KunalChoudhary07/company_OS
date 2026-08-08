@@ -11,6 +11,8 @@
 <!-- Export Report feature: client-side PDF generation only. No data leaves the browser. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js" integrity="sha512-plOdviVmws4Y3JAvbnpfKb2hVxKM1lCwsi3vmElYRj+tiDLffZ4FVUj5a8vyKJ9pIgl8JCAHEJ4D1iUKBecswg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/5.0.8/jspdf.plugin.autotable.min.js" integrity="sha512-QLh0AACvI+3C+bmn3QdH6blN0NWBxwGvBDgV67TvKV5Q2knO9+/+lguVL23JQ9DR7CnfuOSYUBURlXjmJeK11Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Source Checklist feature -->
+<link rel="stylesheet" href="source-checklist/styles/checklist.css"/>
 <script id="tailwind-config">
   tailwind.config = {
     darkMode: "class",
@@ -346,6 +348,12 @@
       </div>
     </div>
 
+    <!-- Search button -->
+    <button onclick="navigate('search')" class="nav-item w-full mb-3 flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors group" data-page="search" aria-label="Search">
+      <span class="material-symbols-outlined text-[20px] text-outline group-hover:text-primary-container transition-colors">search</span>
+      <span class="font-label-lg text-[14px]">Search</span>
+    </button>
+
     <!-- Create Company / Change Company button -->
     <button onclick="handleCreateCompany()" id="create-company-btn" class="w-full mb-5 flex items-center justify-center gap-2 py-2 px-3 bg-primary-container text-on-primary-container rounded-DEFAULT font-label-md text-label-md font-semibold hover:bg-primary-fixed transition-colors focus-visible:ring-2">
       <span class="material-symbols-outlined text-[16px]">add_business</span>
@@ -360,6 +368,8 @@
       <a href="#" onclick="navigate('finance'); return false;" data-page="finance" class="nav-item nav-disabled flex items-center gap-3 px-3 py-2 rounded-lg font-body-md text-[13px] transition-all duration-150" aria-label="Finance"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 0">payments</span><span>Finance</span></a>
       <a href="#" onclick="navigate('marketing'); return false;" data-page="marketing" class="nav-item nav-disabled flex items-center gap-3 px-3 py-2 rounded-lg font-body-md text-[13px] transition-all duration-150" aria-label="Marketing"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 0">campaign</span><span>Marketing</span></a>
       <a href="#" onclick="navigate('sales'); return false;" data-page="sales" class="nav-item nav-disabled flex items-center gap-3 px-3 py-2 rounded-lg font-body-md text-[13px] transition-all duration-150" aria-label="Sales"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 0">trending_up</span><span>Sales</span></a>
+      <a href="#" onclick="navigate('source-checklist'); SourceChecklist.onNavigate(); return false;" data-page="source-checklist" class="nav-item nav-disabled flex items-center gap-3 px-3 py-2 rounded-lg font-body-md text-[13px] transition-all duration-150" aria-label="Source Checklist"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 0">checklist</span><span>Checklist</span><span id="checklist-nav-badge" class="ml-auto font-mono-sm text-[10px]"></span></a>
+      <a href="#" onclick="openExportFromSidebar(); return false;" data-page="export" class="nav-item nav-disabled flex items-center gap-3 px-3 py-2 rounded-lg font-body-md text-[13px] transition-all duration-150" aria-label="Export Report"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 0">download</span><span>Export</span></a>
     </nav>
 
     <div class="mt-auto pt-4 border-t border-outline-variant/30 space-y-0.5">
@@ -383,8 +393,7 @@
         <h2 id="topbar-title" class="font-headline-md text-[16px] font-semibold text-on-surface">CompanyOS</h2>
       </div>
       <div class="flex items-center gap-3">
-        <button onclick="openSearch()" class="hidden sm:flex items-center gap-2 bg-surface-container-high border border-outline-variant rounded-DEFAULT px-3 py-1.5 text-[13px] text-outline hover:border-outline hover:text-on-surface-variant transition-colors w-48" aria-label="Open search"><span class="material-symbols-outlined text-[16px]">search</span><span>Search...</span><span class="ml-auto font-mono-sm text-[11px] border border-outline-variant rounded px-1">⌘K</span></button>
-        <button onclick="openSearch()" class="sm:hidden text-on-surface-variant hover:text-primary-container transition-colors" aria-label="Search"><span class="material-symbols-outlined">search</span></button>
+        <button onclick="openSearch()" class="flex items-center gap-2 bg-surface-container-high border border-outline-variant rounded-DEFAULT px-3 py-1.5 text-[13px] text-outline hover:border-outline hover:text-primary-container transition-colors" aria-label="Open JARVIS"><span class="material-symbols-outlined text-[16px]">smart_toy</span><span class="hidden sm:inline">JARVIS</span><span class="hidden sm:inline ml-auto font-mono-sm text-[11px] border border-outline-variant rounded px-1">⌘K</span></button>
         <div class="relative">
           <button onclick="toggleNotifications()" id="notif-btn" class="relative text-on-surface-variant hover:text-primary-container transition-colors duration-150 p-1" aria-label="Notifications">
             <span class="material-symbols-outlined">notifications</span><span id="notif-badge" class="notif-badge"></span>
@@ -908,6 +917,8 @@
               <div id="results-next-steps" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
             </div>
           </div>
+          <!-- Source Checklist Readiness Widget -->
+          <div id="checklist-readiness-widget" class="hidden mt-6"></div>
         </div>
         <div class="fixed bottom-0 left-0 right-0 md:left-sidebar-width bg-surface/90 backdrop-blur-xl border-t border-outline-variant p-4 z-30">
           <div class="max-w-6xl mx-auto flex justify-between items-center">
@@ -1440,6 +1451,99 @@
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- ==============================
+           PAGE: SEARCH
+           ============================== -->
+      <div id="page-search" class="page-view overflow-y-auto hidden">
+        <div class="max-w-5xl mx-auto p-8 space-y-6">
+          <div class="flex justify-between items-end mb-2">
+            <div>
+              <h2 class="font-display-sm text-[28px] text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-[32px] text-primary-container">manage_search</span> Search Records</h2>
+              <p class="font-body-md text-on-surface-variant mt-1">Search and filter actual generated content and business profile records deterministically.</p>
+            </div>
+          </div>
+          <!-- GENERATED CONTENT SEARCH & FILTERS -->
+          <div class="card rounded-xl flex flex-col mt-4">
+            <div class="p-5 space-y-4">
+              <!-- Search Bar -->
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+                <input id="content-search" type="text" class="form-input pl-10 bg-surface-container border-outline-variant focus:bg-surface-container-high text-[14px] py-2.5 h-auto w-full rounded-lg" placeholder="Search generated content..." autocomplete="off"/>
+              </div>
+              
+              <!-- Filters -->
+              <div class="grid grid-cols-2 md:grid-cols-4 lg:flex lg:flex-wrap gap-3 items-end">
+                <div class="flex-1 min-w-[140px]">
+                  <label class="form-label mb-1">Section</label>
+                  <select id="filter-section" class="form-input text-[13px] py-1.5 h-[34px] bg-[#192122] border-[#3b494c] text-on-surface rounded-lg w-full outline-none focus:border-[#00e5ff] focus:ring-1 focus:ring-[#00e5ff] cursor-pointer">
+                    <option value="">All Sections</option>
+                    <option value="Company">Company</option>
+                    <option value="Research">Research</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Sales">Sales</option>
+                  </select>
+                </div>
+                <div class="flex-1 min-w-[140px]">
+                  <label class="form-label mb-1">Status</label>
+                  <select id="filter-status" class="form-input text-[13px] py-1.5 h-[34px] bg-[#192122] border-[#3b494c] text-on-surface rounded-lg w-full outline-none focus:border-[#00e5ff] focus:ring-1 focus:ring-[#00e5ff] cursor-pointer">
+                    <option value="">All Statuses</option>
+                    <option value="Draft">Draft</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Needs Review">Needs Review</option>
+                  </select>
+                </div>
+                <div class="flex-1 min-w-[140px]">
+                  <label class="form-label mb-1">Agent / Owner</label>
+                  <select id="filter-agent" class="form-input text-[13px] py-1.5 h-[34px] bg-[#192122] border-[#3b494c] text-on-surface rounded-lg w-full outline-none focus:border-[#00e5ff] focus:ring-1 focus:ring-[#00e5ff] cursor-pointer">
+                    <option value="">All Agents</option>
+                    <option value="CEO Agent">CEO Agent</option>
+                    <option value="Research Agent">Research Agent</option>
+                    <option value="Finance Agent">Finance Agent</option>
+                    <option value="Marketing Agent">Marketing Agent</option>
+                    <option value="Sales Agent">Sales Agent</option>
+                  </select>
+                </div>
+                <div class="flex-1 min-w-[140px]">
+                  <label class="form-label mb-1">Data Completeness</label>
+                  <select id="filter-missing" class="form-input text-[13px] py-1.5 h-[34px] bg-[#192122] border-[#3b494c] text-on-surface rounded-lg w-full outline-none focus:border-[#00e5ff] focus:ring-1 focus:ring-[#00e5ff] cursor-pointer">
+                    <option value="">All Records</option>
+                    <option value="Missing Data">Missing Data</option>
+                    <option value="Complete Data">Complete Data</option>
+                  </select>
+                </div>
+                <div class="flex-shrink-0">
+                  <button id="reset-filters-btn" class="flex items-center gap-1 text-[12px] font-label-md text-outline hover:text-on-surface transition-colors py-1.5 px-3 rounded border border-outline-variant hover:bg-surface-container-high h-[34px] bg-[#192122]">
+                    <span class="material-symbols-outlined text-[16px]">restart_alt</span>
+                    Reset Filters
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Result Count -->
+              <div class="flex items-center justify-between mt-2 pt-2 border-t border-outline-variant/30">
+                <p id="content-result-count" class="font-mono-sm text-[11px] text-outline">Loading records...</p>
+              </div>
+
+              <!-- Results List -->
+              <div id="content-results-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2 mt-4 pb-12">
+                <!-- Record templates will be injected here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==============================
+           PAGE: SOURCE CHECKLIST
+           ============================== -->
+      <div id="page-source-checklist" class="page-view overflow-y-auto">
+        <div class="max-w-5xl mx-auto p-8 pb-32">
+          <div id="source-checklist-root"></div>
         </div>
       </div>
 
@@ -3342,16 +3446,137 @@
       if (logoutBtn) logoutBtn.classList.add('hidden');
       if (createLabel) createLabel.textContent = 'Create Company';
 
-      // Disable nav items
+      // Disable nav items, EXCEPT the Search page for the bounty demo
       document.querySelectorAll('.nav-item').forEach(el => {
-        el.classList.add('nav-disabled');
-        el.classList.remove('nav-active', 'nav-inactive');
+        if (el.dataset.page === 'search') {
+          el.classList.remove('nav-disabled');
+          if (!el.classList.contains('nav-active')) el.classList.add('nav-inactive');
+        } else {
+          el.classList.add('nav-disabled');
+          el.classList.remove('nav-active', 'nav-inactive');
+        }
       });
     }
   }
 
   function updateDocumentTitle(companyName) {
     document.title = companyName ? `CompanyOS — ${companyName}` : 'CompanyOS';
+  }
+
+  // ─── Generated Content Search & Filters ───────────────────────────────────
+  const SEEDED_RECORDS = [
+    { id: 1, title: "Chandigarh Coffee Market Analysis", content: "Analysis of the coffee market in Chandigarh...", section: "Research", status: "Completed", agent: "Research Agent", missingData: false },
+    { id: 2, title: "Student Customer Acquisition Campaign", content: "Campaign strategy for student customers...", section: "Marketing", status: "Needs Review", agent: "Marketing Agent", missingData: true, missingFields: ["Target Audience"] },
+    { id: 3, title: "Cafe Partnership Prospects", content: "List of potential cafe partners...", section: "Sales", status: "In Progress", agent: "Sales Agent", missingData: false },
+    { id: 4, title: "Startup Financial Forecast", content: "3-year financial forecast for the startup...", section: "Finance", status: "Draft", agent: "Finance Agent", missingData: true, missingFields: ["Monthly Operating Cost"] },
+    { id: 5, title: "Company Business Profile", content: "Overall business profile and executive summary...", section: "Company", status: "Completed", agent: "CEO Agent", missingData: false },
+    { id: 6, title: "Social Media Content Calendar", content: "Calendar for social media posts...", section: "Marketing", status: "In Progress", agent: "Marketing Agent", missingData: false },
+    { id: 7, title: "Sales Outreach Templates", content: "Email templates for cold outreach...", section: "Sales", status: "Draft", agent: "Sales Agent", missingData: false },
+    { id: 8, title: "Competitor Analysis Report", content: "Detailed analysis of local competitors...", section: "Research", status: "Completed", agent: "Research Agent", missingData: false },
+    { id: 9, title: "Fundraising Pitch Deck Structure", content: "Outline for the pitch deck...", section: "Company", status: "Needs Review", agent: "CEO Agent", missingData: true, missingFields: ["Revenue Projections", "Market Size"] },
+    { id: 10, title: "Initial Budget Allocation", content: "Breakdown of initial capital...", section: "Finance", status: "Completed", agent: "Finance Agent", missingData: false },
+    { id: 11, title: "SEO Keyword Strategy", content: "List of target keywords for organic growth...", section: "Marketing", status: "Completed", agent: "Marketing Agent", missingData: false },
+    { id: 12, title: "B2B Sales Funnel Design", content: "Design of the B2B sales funnel...", section: "Sales", status: "Needs Review", agent: "Sales Agent", missingData: true, missingFields: ["Conversion Rates"] },
+    { id: 13, title: "Customer Persona Research", content: "Detailed profiles of target customers...", section: "Research", status: "In Progress", agent: "Research Agent", missingData: false },
+    { id: 14, title: "Monthly Expense Tracking Sheet", content: "Template for tracking expenses...", section: "Finance", status: "Completed", agent: "Finance Agent", missingData: false },
+    { id: 15, title: "Product Roadmap Q1", content: "Roadmap for product development...", section: "Company", status: "Draft", agent: "CEO Agent", missingData: false },
+    { id: 16, title: "Local Event Sponsorship Plan", content: "Plan for sponsoring local college events...", section: "Marketing", status: "Completed", agent: "Marketing Agent", missingData: false },
+    { id: 17, title: "Lead Generation Form Concepts", content: "Concepts for forms to capture leads...", section: "Sales", status: "In Progress", agent: "Sales Agent", missingData: false },
+    { id: 18, title: "Pricing Strategy Options", content: "Analysis of different pricing models...", section: "Finance", status: "Needs Review", agent: "Finance Agent", missingData: true, missingFields: ["Competitor Pricing Data"] },
+    { id: 19, title: "Brand Voice Guidelines", content: "Guidelines for brand communication...", section: "Marketing", status: "Completed", agent: "Marketing Agent", missingData: false },
+    { id: 20, title: "Mission and Vision Statements", content: "Drafts of mission and vision...", section: "Company", status: "Completed", agent: "CEO Agent", missingData: false }
+  ];
+
+  function renderFilteredRecords() {
+    const listEl = document.getElementById('content-results-list');
+    const countEl = document.getElementById('content-result-count');
+    if (!listEl || !countEl) return;
+
+    const query = (document.getElementById('content-search')?.value || '').toLowerCase();
+    const section = document.getElementById('filter-section')?.value || '';
+    const status = document.getElementById('filter-status')?.value || '';
+    const agent = document.getElementById('filter-agent')?.value || '';
+    const missing = document.getElementById('filter-missing')?.value || '';
+
+    const filteredRecords = SEEDED_RECORDS.filter(record => {
+      const searchMatch = !query || 
+        record.title.toLowerCase().includes(query) || 
+        record.content.toLowerCase().includes(query) ||
+        record.section.toLowerCase().includes(query) ||
+        record.status.toLowerCase().includes(query) ||
+        record.agent.toLowerCase().includes(query);
+      
+      const sectionMatch = !section || record.section === section;
+      const statusMatch = !status || record.status === status;
+      const agentMatch = !agent || record.agent === agent;
+      const missingMatch = !missing || 
+        (missing === 'Missing Data' && record.missingData) ||
+        (missing === 'Complete Data' && !record.missingData);
+
+      return searchMatch && sectionMatch && statusMatch && agentMatch && missingMatch;
+    });
+
+    if (filteredRecords.length === 0) {
+      countEl.innerHTML = 'No matching records. <a href="#" id="inline-reset" class="text-primary-container hover:underline ml-1">Reset filters</a>';
+      const inlineReset = document.getElementById('inline-reset');
+      if (inlineReset) inlineReset.addEventListener('click', (e) => { e.preventDefault(); resetFilters(); });
+    } else if (filteredRecords.length === SEEDED_RECORDS.length) {
+      countEl.textContent = `Showing all ${SEEDED_RECORDS.length} records`;
+    } else {
+      countEl.textContent = `Showing ${filteredRecords.length} of ${SEEDED_RECORDS.length} records`;
+    }
+
+    listEl.innerHTML = filteredRecords.map(record => {
+      let titleHtml = record.title;
+      if (query && record.title.toLowerCase().includes(query)) {
+        const regex = new RegExp(`(${query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')})`, 'gi');
+        titleHtml = record.title.replace(regex, '<span class="bg-primary-container/30 text-primary-container font-semibold px-0.5 rounded">$1</span>');
+      }
+
+      const missingHtml = record.missingData 
+        ? `<div class="mt-3 bg-error-container/10 border border-error/20 p-2 rounded flex flex-col gap-1 w-full md:w-auto">
+             <span class="flex items-center gap-1 font-label-md text-[11px] text-error">
+               <span class="material-symbols-outlined text-[14px]">warning</span> Missing Data
+             </span>
+             ${record.missingFields ? `<span class="font-mono-sm text-[10px] text-error/80 ml-5">Missing: ${record.missingFields.join(', ')}</span>` : ''}
+           </div>`
+        : `<div class="mt-3 flex items-center gap-1 font-label-md text-[11px] text-primary-container justify-end w-full md:w-auto">
+             <span class="material-symbols-outlined text-[14px]">check_circle</span> Complete
+           </div>`;
+
+      return `
+        <div class="card p-4 rounded-xl border border-outline-variant hover:border-primary-container/30 transition-colors bg-surface-container">
+          <div class="flex flex-col md:flex-row md:items-start justify-between gap-3">
+            <div class="flex-1">
+              <h4 class="font-headline-md text-[16px] text-on-surface mb-1">${titleHtml}</h4>
+              <p class="font-body-md text-[13px] text-on-surface-variant line-clamp-2 mb-2">${record.content}</p>
+              <div class="flex flex-wrap items-center gap-2 mt-2">
+                <span class="px-2 py-0.5 bg-surface-container-high rounded text-[11px] font-mono-sm text-on-surface-variant border border-outline-variant">${record.section}</span>
+                <span class="px-2 py-0.5 bg-surface-container-high rounded text-[11px] font-mono-sm text-on-surface-variant border border-outline-variant">${record.status}</span>
+                <span class="px-2 py-0.5 bg-surface-container-high rounded text-[11px] font-mono-sm text-on-surface-variant border border-outline-variant flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">smart_toy</span>${record.agent}</span>
+              </div>
+            </div>
+            <div class="md:text-right min-w-[140px] flex md:justify-end">
+              ${missingHtml}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function resetFilters() {
+    const searchEl = document.getElementById('content-search');
+    if (searchEl) searchEl.value = '';
+    const sectionEl = document.getElementById('filter-section');
+    if (sectionEl) sectionEl.value = '';
+    const statusEl = document.getElementById('filter-status');
+    if (statusEl) statusEl.value = '';
+    const agentEl = document.getElementById('filter-agent');
+    if (agentEl) agentEl.value = '';
+    const missingEl = document.getElementById('filter-missing');
+    if (missingEl) missingEl.value = '';
+    renderFilteredRecords();
   }
 
   // ─── Utility Helpers ──────────────────────────────────────────────────────
@@ -3402,7 +3627,9 @@
       welcome: 'CompanyOS', onboarding: 'Create Company',
       overview: 'Overview', execution: 'Initiative Execution', results: 'Initiative Results',
       company: 'Company', departments: 'Departments', research: 'Research Dept',
-      finance: 'Finance Dept', marketing: 'Marketing Dept', sales: 'Sales Dept'
+      finance: 'Finance Dept', marketing: 'Marketing Dept', sales: 'Sales Dept',
+      'source-checklist': 'Source Checklist',
+      'search': 'Search Records'
     };
     document.getElementById('topbar-title').textContent = titles[pageId] || 'CompanyOS';
     APP.page = pageId;
@@ -3576,6 +3803,17 @@
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) submitJarvisQuestion();
     });
 
+    // Attach Generated Content Search & Filter Events
+    document.getElementById('content-search')?.addEventListener('input', renderFilteredRecords);
+    document.getElementById('filter-section')?.addEventListener('change', renderFilteredRecords);
+    document.getElementById('filter-status')?.addEventListener('change', renderFilteredRecords);
+    document.getElementById('filter-agent')?.addEventListener('change', renderFilteredRecords);
+    document.getElementById('filter-missing')?.addEventListener('change', renderFilteredRecords);
+    document.getElementById('reset-filters-btn')?.addEventListener('click', resetFilters);
+    
+    // Initial Render of Records
+    renderFilteredRecords();
+
     // Health check
     fetch(`${API_BASE}/api/health`)
       .then(r => r.json())
@@ -3627,6 +3865,22 @@
     const btn = document.getElementById('export-report-btn');
     if (menu) menu.style.display = 'none';
     if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function openExportFromSidebar() {
+    const profile = COMPANY_STATE.currentCompany;
+    if (!profile) {
+      alert('No business profile found. Create a company (or try the BeanRush demo) and generate a plan first, then export.');
+      return;
+    }
+    // Navigate to results page and open the export menu
+    navigate('results');
+    setTimeout(() => {
+      const menu = document.getElementById('export-menu');
+      const btn = document.getElementById('export-report-btn');
+      if (menu) menu.style.display = 'block';
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+    }, 100);
   }
   document.addEventListener('click', (e) => {
     const menu = document.getElementById('export-menu');
@@ -3778,11 +4032,52 @@
     return clone;
   }
 
-  // ─── Profile Readiness (built from the ACTUAL collectFormData() fields) ───
-  // CompanyOS has no separate checklist model — this reflects the real
-  // completeness of COMPANY_STATE.currentCompany, the same object the review
-  // screen and launchCompanyOS() already use.
-  function computeReadiness(profile) {
+  // ─── Profile Readiness (uses Source Checklist feature when available) ───
+  // If the Source Checklist feature is loaded, we use its real checklist items
+  // (which include source metadata per section). Otherwise, falls back to a
+  // simple computation from the profile fields.
+  function computeReadinessForExport(profile) {
+    // Try the real Source Checklist feature first
+    if (typeof SourceChecklist !== 'undefined' && typeof SourceChecklist.getReadiness === 'function') {
+      const realReadiness = SourceChecklist.getReadiness();
+      if (realReadiness && realReadiness.total > 0) {
+        // Get items with source metadata from the service
+        const companyName = (profile && profile.company && profile.company.name) || '';
+        let sourceData = {};
+        if (companyName && typeof SourceChecklistService !== 'undefined') {
+          sourceData = SourceChecklistService.load(companyName);
+        }
+        // Compute full items for section-level detail
+        let items = [];
+        if (typeof computeChecklistFromProfile === 'function') {
+          items = computeChecklistFromProfile(profile);
+        }
+        const sections = items.map(item => {
+          const src = sourceData[item.id] || {};
+          const sourceLabel = src.sourceReference || (item.completed ? 'Founder input' : 'Not provided');
+          const sourceType = (typeof SOURCE_TYPE_LABELS !== 'undefined' && src.sourceType) ? SOURCE_TYPE_LABELS[src.sourceType] : '';
+          return {
+            label: item.label,
+            complete: item.completed,
+            required: item.required,
+            source: sourceLabel,
+            sourceType: sourceType,
+            notes: src.notes || '',
+          };
+        });
+        return {
+          total: realReadiness.total,
+          complete: realReadiness.completed,
+          percent: realReadiness.percent,
+          isReady: realReadiness.isReady,
+          requiredTotal: realReadiness.requiredTotal,
+          requiredComplete: realReadiness.requiredComplete,
+          sections,
+        };
+      }
+    }
+
+    // Fallback: simple computation from profile fields
     const company = profile.company || {};
     const business = profile.business || {};
     const goals = profile.goals || {};
@@ -3800,10 +4095,10 @@
       { label: 'Business Objective', ok: hasVal(profile.objective) },
     ];
 
-    const sections = checks.map(c => ({ label: c.label, complete: c.ok, source: c.ok ? 'Founder input' : 'Not provided' }));
+    const sections = checks.map(c => ({ label: c.label, complete: c.ok, required: true, source: c.ok ? 'Founder input' : 'Not provided', sourceType: '', notes: '' }));
     const complete = sections.filter(s => s.complete).length;
     const total = sections.length;
-    return { total, complete, percent: total ? Math.round((complete / total) * 100) : 0, sections };
+    return { total, complete, percent: total ? Math.round((complete / total) * 100) : 0, isReady: complete === total, requiredTotal: total, requiredComplete: complete, sections };
   }
 
   // ─── Statuses (from the ACTUAL companyResult.agents / execution blocks) ───
@@ -3899,7 +4194,7 @@
           'Business Objective': safeVal(profile.objective),
         },
       },
-      readiness: computeReadiness(profile),
+      readiness: computeReadinessForExport(profile),
       recommendations: normalizeStringList(companyResult && companyResult.recommendations),
       nextSteps: normalizeStringList(companyResult && companyResult.next_steps),
       statuses: extractStatuses(companyResult),
@@ -3939,7 +4234,9 @@
     });
 
     report.readiness.sections.forEach(s => {
-      rows.push(['Profile Readiness', s.label, s.complete ? 'Complete' : 'Incomplete', s.complete ? 'Complete' : 'Pending', s.source]);
+      const sourceInfo = s.sourceType ? `${s.sourceType}: ${s.source}` : s.source;
+      rows.push(['Profile Readiness', s.label, s.complete ? 'Complete' : 'Incomplete', s.complete ? 'Complete' : 'Pending', sourceInfo]);
+      if (s.notes) rows.push(['Profile Readiness', `${s.label} — Notes`, s.notes, '', 'Source Checklist']);
     });
     rows.push(['Profile Readiness', 'Overall Completion', `${report.readiness.complete}/${report.readiness.total} (${report.readiness.percent}%)`, '', '']);
 
@@ -4010,9 +4307,12 @@
   }
   function generateHtml(report) {
     const companyName = escapeHtml(report.meta.companyName);
-    const readinessRows = report.readiness.sections.map(s =>
-      `<li class="${s.complete ? 'ok' : 'warn'}"><span class="mark">${s.complete ? '\u2713' : '\u26A0'}</span> ${escapeHtml(s.label)} — <em>${escapeHtml(s.source)}</em></li>`
-    ).join('');
+    const readinessRows = report.readiness.sections.map(s => {
+      const sourceInfo = s.sourceType ? `${escapeHtml(s.sourceType)}: ${escapeHtml(s.source)}` : escapeHtml(s.source);
+      const notesHtml = s.notes ? ` <span style="color:#849396;font-size:11px;"> — ${escapeHtml(s.notes)}</span>` : '';
+      const reqBadge = s.required === false ? ' <span style="color:#849396;font-size:10px;">(optional)</span>' : '';
+      return `<li class="${s.complete ? 'ok' : 'warn'}"><span class="mark">${s.complete ? '\u2713' : '\u26A0'}</span> ${escapeHtml(s.label)}${reqBadge} — <em>${sourceInfo}</em>${notesHtml}</li>`;
+    }).join('');
     const statusRows = report.statuses.length
       ? report.statuses.map(s => `<tr><th>${escapeHtml(s.label)}</th><td><strong>${escapeHtml(s.value)}</strong>${s.detail ? ' — ' + escapeHtml(s.detail) : ''}</td></tr>`).join('')
       : `<tr><td colspan="2" class="muted">No status data available</td></tr>`;
@@ -4200,8 +4500,12 @@
 
     // ── 2. Profile Readiness ──
     heading('2. Profile Readiness');
-    paragraph(`${report.readiness.complete} / ${report.readiness.total} complete — ${report.readiness.percent}%`, { size: 11 });
-    table(['Section', 'Status', 'Source'], report.readiness.sections.map(s => [s.label, s.complete ? 'Complete' : 'Incomplete', s.source]));
+    const readyLabel = report.readiness.isReady ? ' — Ready for generation' : '';
+    paragraph(`${report.readiness.complete} / ${report.readiness.total} complete — ${report.readiness.percent}%${readyLabel}`, { size: 11 });
+    table(['Section', 'Status', 'Source', 'Notes'], report.readiness.sections.map(s => {
+      const sourceInfo = s.sourceType ? `${s.sourceType}: ${s.source}` : s.source;
+      return [s.label + (s.required === false ? ' (optional)' : ''), s.complete ? 'Complete' : 'Incomplete', sourceInfo, s.notes || ''];
+    }));
 
     // ── 3. Recommendations ──
     heading('3. Recommendations');
@@ -4290,5 +4594,12 @@
     }
   }
 </script>
+<!-- Source Checklist feature scripts (loaded after main app script) -->
+<script src="source-checklist/types/checklistTypes.js"></script>
+<script src="source-checklist/data/sampleChecklist.js"></script>
+<script src="source-checklist/utils/checklistCompletion.js"></script>
+<script src="source-checklist/services/sourceChecklistService.js"></script>
+<script src="source-checklist/components/SourceChecklist.js"></script>
+<script src="source-checklist/index.js"></script>
 </body>
 </html>

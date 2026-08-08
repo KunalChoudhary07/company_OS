@@ -87,9 +87,19 @@ async def serve_frontend():
 # Serve any other static assets (if needed in the future)
 @app.get("/{path:path}", include_in_schema=False)
 async def catch_all(path: str):
-    """Serve index.html for all non-API routes (SPA fallback)."""
+    """Serve static files if they exist, otherwise fall back to index.html."""
     if path.startswith("api/"):
         from fastapi import HTTPException
         raise HTTPException(status_code=404)
+
+    # Try to serve the actual file from the project root
+    file_path = os.path.join(FRONTEND_DIR, path)
+    # Security: ensure the resolved path is still within the frontend directory
+    real_frontend = os.path.realpath(FRONTEND_DIR)
+    real_file = os.path.realpath(file_path)
+    if real_file.startswith(real_frontend) and os.path.isfile(real_file):
+        return FileResponse(real_file, headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
+
+    # SPA fallback
     index_path = os.path.join(FRONTEND_DIR, "index.html")
     return FileResponse(index_path, headers={"Cache-Control": "no-cache, no-store, must-revalidate"})

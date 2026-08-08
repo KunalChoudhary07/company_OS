@@ -1,0 +1,309 @@
+/**
+ * @fileoverview
+ * SOURCE CHECKLIST — CSS Styles
+ * Feature: source-checklist
+ *
+ * Minimal additional styles for the Source Checklist feature.
+ * Uses the same design tokens as the existing CompanyOS app.
+ * Does NOT override any existing styles.
+ */
+
+/* ─── Checklist Item Card ─────────────────────────────────────────────────── */
+
+.checklist-item {
+  background: #1C1C1E;
+  border: 1px solid #2C2C2E;
+  border-radius: 0.75rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.checklist-item.completed {
+  border-left: 3px solid #00e5ff;
+}
+
+.checklist-item.incomplete.required {
+  border-left: 3px solid #2C2C2E;
+}
+
+.checklist-item.incomplete.optional {
+  border-left: 3px solid transparent;
+}
+
+.checklist-item:hover {
+  border-color: #3b494c;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Item Header ──────────────────────────────────────────────────────────── */
+
+.checklist-item-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checklist-item-header:hover .checklist-expand-icon {
+  color: #bac9cc;
+}
+
+/* ─── Status Icon ─────────────────────────────────────────────────────────── */
+
+.checklist-status-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.checklist-status-icon.done {
+  background: rgba(0, 229, 255, 0.12);
+  color: #00e5ff;
+}
+
+.checklist-status-icon.pending.required {
+  background: rgba(132, 147, 150, 0.08);
+  border: 1.5px dashed #3b494c;
+  color: #516368;
+}
+
+.checklist-status-icon.pending.optional {
+  background: rgba(132, 147, 150, 0.06);
+  border: 1.5px dashed #2e3638;
+  color: #3b494c;
+}
+
+/* ─── Badge: Required / Optional ─────────────────────────────────────────── */
+
+.checklist-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Geist', monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.checklist-badge.required {
+  background: rgba(0, 229, 255, 0.08);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.checklist-badge.optional {
+  background: rgba(132, 147, 150, 0.08);
+  color: #849396;
+  border: 1px solid rgba(132, 147, 150, 0.2);
+}
+
+/* ─── Source Panel (expandable) ───────────────────────────────────────────── */
+
+.checklist-source-panel {
+  display: none;
+  padding: 0 16px 16px 56px;
+  animation: fade-in-up 0.2s ease;
+}
+
+.checklist-source-panel.open {
+  display: block;
+}
+
+.checklist-source-select {
+  width: 100%;
+  background: #192122 !important;
+  border: 1px solid #3b494c !important;
+  border-radius: 0.5rem;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #dce4e5 !important;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23849396' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 10px center !important;
+}
+
+.checklist-source-select:focus {
+  border-color: #00e5ff !important;
+  box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.1);
+}
+
+.checklist-source-select option {
+  background: #1C1C1E;
+  color: #dce4e5;
+}
+
+/* ─── Progress Bar ────────────────────────────────────────────────────────── */
+
+.cl-progress-track {
+  height: 6px;
+  background: #2e3638;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.cl-progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #00e5ff, #00c4d4);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Readiness Status Badge ──────────────────────────────────────────────── */
+
+.cl-status-ready {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Geist', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(0, 229, 255, 0.1);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+}
+
+.cl-status-incomplete {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Geist', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(243, 191, 38, 0.1);
+  color: #f3bf26;
+  border: 1px solid rgba(243, 191, 38, 0.25);
+}
+
+/* ─── Save Button ─────────────────────────────────────────────────────────── */
+
+.cl-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: #00e5ff;
+  color: #001f24;
+  font-family: 'Geist', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.cl-save-btn:hover {
+  background: #00daf3;
+  transform: translateY(-1px);
+}
+
+.cl-save-btn:active {
+  transform: translateY(0);
+}
+
+.cl-save-btn.saved {
+  background: rgba(0, 229, 255, 0.15);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+/* ─── Source Summary Line ─────────────────────────────────────────────────── */
+
+.cl-source-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Geist', monospace;
+  font-size: 11px;
+  color: #516368;
+  margin-top: 2px;
+  transition: color 0.2s;
+}
+
+.cl-source-summary.has-source {
+  color: #849396;
+}
+
+/* ─── Readiness Widget (mini, on results page) ────────────────────────────── */
+
+.cl-readiness-widget {
+  background: #192122;
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  border-radius: 0.75rem;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ─── Profile Selector on Checklist Page ──────────────────────────────────── */
+
+.cl-profile-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #192122;
+  border: 1px solid #3b494c;
+  border-radius: 9999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #dce4e5;
+  cursor: default;
+}
+
+/* ─── Empty State ─────────────────────────────────────────────────────────── */
+
+.cl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.cl-empty-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(0, 229, 255, 0.06);
+  border: 1px solid rgba(0, 229, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+/* ─── Skeleton Loading ────────────────────────────────────────────────────── */
+
+.cl-skeleton {
+  background: linear-gradient(90deg, #1C1C1E 25%, #242b2d 50%, #1C1C1E 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.75rem;
+}
