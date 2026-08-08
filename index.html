@@ -8,6 +8,9 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@400;500;600&display=swap" rel="stylesheet"/>
+<!-- Export Report feature: client-side PDF generation only. No data leaves the browser. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js" integrity="sha512-plOdviVmws4Y3JAvbnpfKb2hVxKM1lCwsi3vmElYRj+tiDLffZ4FVUj5a8vyKJ9pIgl8JCAHEJ4D1iUKBecswg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/5.0.8/jspdf.plugin.autotable.min.js" integrity="sha512-QLh0AACvI+3C+bmn3QdH6blN0NWBxwGvBDgV67TvKV5Q2knO9+/+lguVL23JQ9DR7CnfuOSYUBURlXjmJeK11Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script id="tailwind-config">
   tailwind.config = {
     darkMode: "class",
@@ -909,7 +912,15 @@
         <div class="fixed bottom-0 left-0 right-0 md:left-sidebar-width bg-surface/90 backdrop-blur-xl border-t border-outline-variant p-4 z-30">
           <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex gap-3">
-              <button onclick="alert('Export (coming soon)')" class="flex items-center gap-1.5 text-outline hover:text-on-surface font-label-md text-label-md px-3 py-2 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[16px]">download</span>Export</button>
+              <div class="relative">
+                <button onclick="toggleExportMenu()" id="export-report-btn" class="flex items-center gap-1.5 text-outline hover:text-on-surface font-label-md text-label-md px-3 py-2 rounded-lg hover:bg-surface-container transition-colors" aria-haspopup="true" aria-expanded="false"><span class="material-symbols-outlined text-[16px]">download</span>Export Report</button>
+                <div id="export-menu" role="menu" aria-label="Export Report" style="position:absolute; bottom:calc(100% + 8px); left:0; width:220px; background:#1C1C1E; border:1px solid #2C2C2E; border-radius:0.5rem; z-index:50; display:none; animation: fade-in-up 0.15s ease; overflow:hidden;">
+                  <div class="px-4 py-2.5 border-b border-outline-variant"><span class="font-label-md text-label-md text-on-surface font-semibold">Export Report</span></div>
+                  <button role="menuitem" onclick="exportReport('pdf')" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-left"><span class="material-symbols-outlined text-[16px] text-primary-container">picture_as_pdf</span>Download PDF</button>
+                  <button role="menuitem" onclick="exportReport('csv')" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-left"><span class="material-symbols-outlined text-[16px] text-primary-container">table_chart</span>Download CSV</button>
+                  <button role="menuitem" onclick="exportReport('html')" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-left"><span class="material-symbols-outlined text-[16px] text-primary-container">code</span>Download HTML</button>
+                </div>
+              </div>
               <button onclick="alert('Saved (coming soon)')" class="flex items-center gap-1.5 text-outline hover:text-on-surface font-label-md text-label-md px-3 py-2 rounded-lg hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[16px]">bookmark</span>Save</button>
             </div>
             <button onclick="openAskJarvis()" class="flex items-center gap-2 bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold px-5 py-2.5 rounded-DEFAULT hover:bg-primary-fixed transition-colors"><span class="material-symbols-outlined text-[18px]">smart_toy</span>Ask JARVIS</button>
@@ -3168,28 +3179,56 @@
   }
 
   // ─── Onboarding: Open / Cancel ────────────────────────────────────────────
-  function openOnboarding() {
-    // Reset form state
+  function populateDefaultOnboardingData() {
+    // Reset form state with new defaults
     ONBOARDING.step = 1;
-    ONBOARDING.selectedStage = 'Idea Stage';
+    ONBOARDING.selectedStage = 'Early Stage';
     ONBOARDING.selectedBmodel = 'B2C';
     ONBOARDING.selectedGoal = 'Launch the company';
     ONBOARDING.selectedFunding = 'Bootstrapped';
-    ONBOARDING.selectedTeamSize = 'Solo founder';
-    ONBOARDING.selectedDepartments = [];
+    ONBOARDING.selectedTeamSize = '2-5';
+    ONBOARDING.selectedDepartments = ['Operations', 'Marketing'];
 
-    // Clear inputs
-    ['f-company-name','f-industry','f-country','f-city','f-description','f-target-customers','f-problem','f-solution','f-short-term','f-long-term','f-budget','f-expected-revenue','f-monthly-budget','f-founder-role','f-skills','f-objective'].forEach(id => {
+    const defaults = {
+      'f-company-name': 'BeanRush Coffee',
+      'f-industry': 'Food & Beverage',
+      'f-country': 'India',
+      'f-city': 'Chandigarh',
+      'f-description': 'Affordable specialty coffee shops for students and young professionals, with a mobile app for zero-wait pre-ordering.',
+      'f-target-customers': 'Students aged 18-25 and young professionals aged 22-35 in Chandigarh seeking quality coffee at affordable prices.',
+      'f-problem': 'Lack of tech-enabled, affordable specialty coffee in Chandigarh — long queues and poor digital experience at existing cafes.',
+      'f-solution': 'Mobile app-enabled grab-and-go specialty coffee kiosks in high-footfall areas with a loyalty rewards program.',
+      'f-short-term': 'Open first location in Sector 17 Chandigarh within 3 months, reach 500 app downloads in first month.',
+      'f-long-term': 'Expand to 5 locations in Punjab within 2 years, ₹5 crore annual revenue by Year 3.',
+      'f-budget': '₹8.5 lakh',
+      'f-expected-revenue': '₹1.5 lakh per month by Month 3',
+      'f-monthly-budget': '₹88,000 per month',
+      'f-founder-role': 'Founder & CEO',
+      'f-skills': 'Coffee industry knowledge, business development, basic marketing',
+      'f-objective': 'I want to launch BeanRush Coffee in Chandigarh within the next 6 months, attract students and young professionals as primary customers, and reach ₹5 lakh monthly revenue. I need a complete go-to-market strategy, financial model, and marketing plan including a mobile app strategy.'
+    };
+
+    // Populate inputs
+    Object.entries(defaults).forEach(([id, val]) => {
       const el = document.getElementById(id);
-      if (el) { el.value = ''; el.classList.remove('error'); }
+      if (el) { 
+        el.value = val; 
+        el.classList.remove('error'); 
+      }
     });
 
-    // Reset chips
+    // Reset all chips
     document.querySelectorAll('.form-chip').forEach(c => c.classList.remove('selected'));
+    
+    // Select default chips (single choice)
     const defaultSelections = {
-      'chips-stage': 'Idea Stage', 'chips-bmodel': 'B2C',
-      'chips-goal': 'Launch the company', 'chips-funding': 'Bootstrapped', 'chips-team-size': 'Solo founder'
+      'chips-stage': 'Early Stage', 
+      'chips-bmodel': 'B2C',
+      'chips-goal': 'Launch the company', 
+      'chips-funding': 'Bootstrapped', 
+      'chips-team-size': '2-5'
     };
+    
     Object.entries(defaultSelections).forEach(([containerId, val]) => {
       const container = document.getElementById(containerId);
       if (!container) return;
@@ -3197,6 +3236,18 @@
       if (chip) chip.classList.add('selected');
     });
 
+    // Select default chips (multiple choice for departments)
+    const deptContainer = document.getElementById('chips-departments');
+    if (deptContainer) {
+      ONBOARDING.selectedDepartments.forEach(val => {
+        const chip = Array.from(deptContainer.querySelectorAll('.form-chip')).find(c => c.dataset.value === val);
+        if (chip) chip.classList.add('selected');
+      });
+    }
+  }
+
+  function openOnboarding() {
+    populateDefaultOnboardingData();
     navigate('onboarding');
     goToStep(1);
   }
@@ -3549,8 +3600,695 @@
       closeLogoutModal();
       closeCreateNewModal();
       closeMobileSidebar();
+      closeExportMenu();
     }
   });
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // ─── EXPORT REPORT FEATURE ───────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════════
+  // Additive feature. Does NOT call the LLM, does NOT call POST /api/initiative,
+  // does NOT regenerate the company. It only reads COMPANY_STATE.currentCompany
+  // (the real collectFormData() profile) and COMPANY_STATE.companyResult (the
+  // real AI response already stored after launchCompanyOS()) and renders them
+  // to a file locally in the browser.
+
+  // ─── Export Menu (dropdown) ───────────────────────────────────────────────
+  function toggleExportMenu() {
+    const menu = document.getElementById('export-menu');
+    const btn = document.getElementById('export-report-btn');
+    if (!menu) return;
+    const willOpen = menu.style.display !== 'block';
+    menu.style.display = willOpen ? 'block' : 'none';
+    if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  }
+  function closeExportMenu() {
+    const menu = document.getElementById('export-menu');
+    const btn = document.getElementById('export-report-btn');
+    if (menu) menu.style.display = 'none';
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('export-menu');
+    const btn = document.getElementById('export-report-btn');
+    if (!menu || menu.style.display !== 'block') return;
+    if (menu.contains(e.target) || (btn && btn.contains(e.target))) return;
+    closeExportMenu();
+  });
+
+  // ─── Small safe-value helpers (never leak undefined/null/[object Object]) ─
+  function hasVal(x) {
+    if (x === null || x === undefined) return false;
+    if (typeof x === 'string') {
+      const t = x.trim().toLowerCase();
+      return t !== '' && t !== 'not sure';
+    }
+    if (Array.isArray(x)) return x.length > 0;
+    if (typeof x === 'object') return Object.keys(x).length > 0;
+    return true;
+  }
+  function safeVal(x, fallback) {
+    fallback = fallback === undefined ? 'Not provided' : fallback;
+    if (!hasVal(x)) return fallback;
+    if (typeof x === 'number') return x.toLocaleString('en-IN');
+    if (typeof x === 'boolean') return x ? 'Yes' : 'No';
+    if (typeof x === 'object') return fallback; // never dump [object Object]
+    return String(x).trim();
+  }
+  function stringifyLeaf(v) {
+    if (v === null || v === undefined || v === '') return 'Not provided';
+    if (typeof v === 'number') return v.toLocaleString('en-IN');
+    if (typeof v === 'boolean') return v ? 'Yes' : 'No';
+    return String(v);
+  }
+  function humanizeKey(key) {
+    return String(key)
+      .replace(/_/g, ' ')
+      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+  function humanizeStatus(s) {
+    if (!hasVal(s)) return 'Unknown';
+    return String(s)
+      .replace(/[✓✗]/g, '')
+      .trim()
+      .toLowerCase()
+      .split(/[\s_]+/)
+      .filter(Boolean)
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+  }
+  function normalizeStringList(arr) {
+    if (!Array.isArray(arr)) return [];
+    return arr.map(item => {
+      if (item === null || item === undefined) return null;
+      if (typeof item === 'string') return item.trim();
+      if (typeof item === 'object') {
+        // Recommendation-like objects: { title, description, priority, category, owner, status }
+        const parts = [];
+        if (hasVal(item.title)) parts.push(item.title);
+        if (hasVal(item.description)) parts.push(item.description);
+        if (!parts.length && hasVal(item.name)) parts.push(item.name);
+        const meta = [];
+        if (hasVal(item.priority)) meta.push(`Priority: ${item.priority}`);
+        if (hasVal(item.category)) meta.push(`Category: ${item.category}`);
+        if (hasVal(item.owner)) meta.push(`Owner: ${item.owner}`);
+        if (hasVal(item.status)) meta.push(`Status: ${item.status}`);
+        let text = parts.join(' — ');
+        if (meta.length) text += (text ? ' ' : '') + `(${meta.join(', ')})`;
+        return text || null;
+      }
+      return String(item);
+    }).filter(hasVal);
+  }
+  function escapeHtml(str) {
+    return String(str === null || str === undefined ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  function sanitizeFilenameSegment(name) {
+    const cleaned = (name || 'Company')
+      .toString()
+      .trim()
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .replace(/-{2,}/g, '-');
+    return cleaned || 'Company';
+  }
+  function downloadBlob(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  // Generic flattener for the AI-generated research/finance/marketing/sales
+  // blocks so PDF/CSV/HTML can all surface "other insights" without any
+  // hardcoded knowledge of the exact LLM output shape.
+  function flattenInsight(obj, prefix) {
+    prefix = prefix || '';
+    const rows = [];
+    if (obj === null || obj === undefined) return rows;
+    if (Array.isArray(obj)) {
+      if (obj.length === 0) return rows;
+      const allPrimitive = obj.every(i => i === null || typeof i !== 'object');
+      if (allPrimitive) {
+        rows.push({ field: prefix || 'Items', value: obj.map(stringifyLeaf).join('  |  ') });
+      } else {
+        obj.forEach((item, idx) => {
+          const itemPrefix = prefix ? `${prefix} #${idx + 1}` : `#${idx + 1}`;
+          if (item && typeof item === 'object') rows.push(...flattenInsight(item, itemPrefix));
+          else rows.push({ field: itemPrefix, value: stringifyLeaf(item) });
+        });
+      }
+      return rows;
+    }
+    if (typeof obj === 'object') {
+      Object.entries(obj).forEach(([k, v]) => {
+        const label = humanizeKey(k);
+        const fullLabel = prefix ? `${prefix} — ${label}` : label;
+        if (v && typeof v === 'object') rows.push(...flattenInsight(v, fullLabel));
+        else rows.push({ field: fullLabel, value: stringifyLeaf(v) });
+      });
+      return rows;
+    }
+    rows.push({ field: prefix || 'Value', value: stringifyLeaf(obj) });
+    return rows;
+  }
+  // Financial monthlyData can be a large raw array from an uploaded CSV —
+  // summarize it instead of dumping every row into the report.
+  function sanitizeFinanceForFlatten(fin) {
+    if (!fin || typeof fin !== 'object') return fin;
+    const clone = { ...fin };
+    if (Array.isArray(clone.monthlyData)) {
+      clone.monthlyData = clone.monthlyData.length
+        ? `${clone.monthlyData.length} month(s) of uploaded financial data (see Finance dept in-app for full detail)`
+        : null;
+    }
+    return clone;
+  }
+
+  // ─── Profile Readiness (built from the ACTUAL collectFormData() fields) ───
+  // CompanyOS has no separate checklist model — this reflects the real
+  // completeness of COMPANY_STATE.currentCompany, the same object the review
+  // screen and launchCompanyOS() already use.
+  function computeReadiness(profile) {
+    const company = profile.company || {};
+    const business = profile.business || {};
+    const goals = profile.goals || {};
+    const finance = profile.finance || {};
+    const team = profile.team || {};
+
+    const checks = [
+      { label: 'Company Information', ok: hasVal(company.name) && hasVal(company.industry) },
+      { label: 'Business Model & Description', ok: hasVal(business.description) && hasVal(business.business_model) },
+      { label: 'Target Customer', ok: hasVal(business.target_customers) },
+      { label: 'Problem & Solution', ok: hasVal(business.problem) && hasVal(business.solution) },
+      { label: 'Goals', ok: hasVal(goals.primary_goal) && hasVal(goals.short_term) },
+      { label: 'Financial Information', ok: hasVal(finance.budget) && hasVal(finance.expected_revenue) },
+      { label: 'Team & Operations', ok: hasVal(team.founder_role) && hasVal(team.skills) },
+      { label: 'Business Objective', ok: hasVal(profile.objective) },
+    ];
+
+    const sections = checks.map(c => ({ label: c.label, complete: c.ok, source: c.ok ? 'Founder input' : 'Not provided' }));
+    const complete = sections.filter(s => s.complete).length;
+    const total = sections.length;
+    return { total, complete, percent: total ? Math.round((complete / total) * 100) : 0, sections };
+  }
+
+  // ─── Statuses (from the ACTUAL companyResult.agents / execution blocks) ───
+  function extractStatuses(companyResult) {
+    if (!companyResult) return [];
+    const rows = [];
+    const agents = companyResult.agents || {};
+    const labels = { ceo: 'CEO / Strategy', research: 'Research', finance: 'Finance', marketing: 'Marketing', sales: 'Sales' };
+    Object.keys(labels).forEach(key => {
+      const a = agents[key];
+      if (a && hasVal(a.status)) {
+        rows.push({ label: labels[key], value: humanizeStatus(a.status), detail: safeVal(a.summary, '') });
+      }
+    });
+    const mktExec = companyResult.marketing && companyResult.marketing.execution;
+    if (mktExec && hasVal(mktExec.status)) rows.push({ label: 'Marketing Execution', value: humanizeStatus(mktExec.status), detail: '' });
+    const salExec = companyResult.sales && companyResult.sales.execution;
+    if (salExec && hasVal(salExec.status)) rows.push({ label: 'Sales Execution', value: humanizeStatus(salExec.status), detail: '' });
+    return rows;
+  }
+
+  // ─── Notes (CompanyOS currently has no dedicated notes field; this checks
+  // every plausible existing location so nothing is silently dropped if one
+  // is added later, and falls back honestly to "No notes provided") ─────────
+  function extractNotes(profile, companyResult) {
+    const candidates = [
+      profile && profile.notes,
+      companyResult && companyResult.notes,
+      companyResult && companyResult.initiative && companyResult.initiative.notes,
+    ];
+    for (const c of candidates) {
+      if (hasVal(c)) return String(c).trim();
+    }
+    return null;
+  }
+
+  // ─── THE single normalized report model — PDF/CSV/HTML all read from this
+  // and nothing else, so they can never disagree with each other. ───────────
+  function buildBusinessReport(profile, companyResult) {
+    profile = profile || {};
+    const company = profile.company || {};
+    const business = profile.business || {};
+    const goals = profile.goals || {};
+    const finance = profile.finance || {};
+    const team = profile.team || {};
+
+    const companyName = hasVal(company.name)
+      ? company.name.trim()
+      : safeVal(companyResult && companyResult.initiative && companyResult.initiative.name, 'Untitled Company');
+
+    const now = new Date();
+
+    return {
+      meta: {
+        companyName,
+        generatedAt: now.toISOString(),
+        generatedAtDisplay: now.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }),
+        isDemo: !!COMPANY_STATE.isDemo,
+      },
+      profile: {
+        company: {
+          'Company Name': safeVal(company.name),
+          'Industry': safeVal(company.industry),
+          'Stage': safeVal(company.stage),
+          'Country': safeVal(company.country),
+          'City': safeVal(company.city),
+        },
+        business: {
+          'Description': safeVal(business.description),
+          'Business Model': safeVal(business.business_model),
+          'Target Customers': safeVal(business.target_customers),
+          'Problem': safeVal(business.problem),
+          'Solution': safeVal(business.solution),
+        },
+        goals: {
+          'Primary Goal': safeVal(goals.primary_goal),
+          'Short-Term Goals': safeVal(goals.short_term),
+          'Long-Term Goals': safeVal(goals.long_term),
+        },
+        finance: {
+          'Current Budget': safeVal(finance.budget),
+          'Expected Monthly Revenue': safeVal(finance.expected_revenue),
+          'Monthly Operating Budget': safeVal(finance.monthly_budget),
+          'Funding Status': safeVal(finance.funding_status),
+        },
+        team: {
+          'Team Size': safeVal(team.size),
+          'Founder Role': safeVal(team.founder_role),
+          'Team Skills': safeVal(team.skills),
+          'Departments': (Array.isArray(team.departments) && team.departments.length) ? team.departments.join(', ') : 'Not provided',
+        },
+        objective: {
+          'Business Objective': safeVal(profile.objective),
+        },
+      },
+      readiness: computeReadiness(profile),
+      recommendations: normalizeStringList(companyResult && companyResult.recommendations),
+      nextSteps: normalizeStringList(companyResult && companyResult.next_steps),
+      statuses: extractStatuses(companyResult),
+      notes: extractNotes(profile, companyResult),
+      insights: {
+        executiveSummary: safeVal(companyResult && companyResult.executive_summary, ''),
+        research: (companyResult && companyResult.research) || null,
+        finance: sanitizeFinanceForFlatten(companyResult && companyResult.finance),
+        marketing: (companyResult && companyResult.marketing) || null,
+        sales: (companyResult && companyResult.sales) || null,
+        executionPlan: (companyResult && Array.isArray(companyResult.execution_plan)) ? companyResult.execution_plan : [],
+      },
+    };
+  }
+
+  // ─── CSV Export ────────────────────────────────────────────────────────────
+  function csvEscape(v) {
+    const s = (v === null || v === undefined) ? '' : String(v);
+    if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  }
+  function buildCsvRows(report) {
+    const rows = [['Section', 'Field', 'Value', 'Status', 'Source']];
+    const profileSections = [
+      ['Company Information', report.profile.company],
+      ['Business', report.profile.business],
+      ['Goals', report.profile.goals],
+      ['Finance', report.profile.finance],
+      ['Team & Operations', report.profile.team],
+      ['Objective', report.profile.objective],
+    ];
+    profileSections.forEach(([sectionName, fields]) => {
+      Object.entries(fields).forEach(([field, value]) => {
+        const provided = value !== 'Not provided';
+        rows.push([sectionName, field, value, provided ? 'Complete' : 'Pending', provided ? 'Founder input' : 'Not provided']);
+      });
+    });
+
+    report.readiness.sections.forEach(s => {
+      rows.push(['Profile Readiness', s.label, s.complete ? 'Complete' : 'Incomplete', s.complete ? 'Complete' : 'Pending', s.source]);
+    });
+    rows.push(['Profile Readiness', 'Overall Completion', `${report.readiness.complete}/${report.readiness.total} (${report.readiness.percent}%)`, '', '']);
+
+    if (report.recommendations.length) {
+      report.recommendations.forEach((r, i) => rows.push(['Recommendations', `Recommendation ${i + 1}`, r, '', 'CompanyOS AI']));
+    } else {
+      rows.push(['Recommendations', 'Recommendations', 'No recommendations available', '', '']);
+    }
+
+    if (report.nextSteps.length) {
+      report.nextSteps.forEach((r, i) => rows.push(['Next Steps', `Step ${i + 1}`, r, '', 'CompanyOS AI']));
+    }
+
+    if (report.statuses.length) {
+      report.statuses.forEach(s => rows.push(['Statuses', s.label, s.detail ? `${s.value} — ${s.detail}` : s.value, s.value, 'CompanyOS AI']));
+    } else {
+      rows.push(['Statuses', 'Statuses', 'No status data available', '', '']);
+    }
+
+    rows.push(['Notes', 'Notes', report.notes || 'No notes provided', '', report.notes ? 'Founder input' : '']);
+
+    [
+      ['Research', report.insights.research],
+      ['Finance Insights', report.insights.finance],
+      ['Marketing', report.insights.marketing],
+      ['Sales', report.insights.sales],
+    ].forEach(([name, data]) => {
+      if (!data) return;
+      flattenInsight(data).forEach(({ field, value }) => rows.push([name, field, value, '', 'CompanyOS AI']));
+    });
+
+    report.insights.executionPlan.forEach((step, i) => {
+      const action = safeVal(step && step.action, '');
+      const owner = step && hasVal(step.owner) ? ` (Owner: ${step.owner})` : '';
+      rows.push(['Execution Plan', safeVal(step && step.week, `Step ${i + 1}`), `${action}${owner}`, '', 'CompanyOS AI']);
+    });
+
+    if (report.insights.executiveSummary) {
+      rows.push(['Executive Summary', 'Summary', report.insights.executiveSummary, '', 'CompanyOS AI']);
+    }
+
+    return rows;
+  }
+  function generateCsv(report) {
+    const rows = buildCsvRows(report);
+    // UTF-8 BOM so ₹ and other non-ASCII characters render correctly in Excel.
+    return '\ufeff' + rows.map(r => r.map(csvEscape).join(',')).join('\r\n');
+  }
+
+  // ─── HTML Export (fully standalone, inline CSS, no external resources) ────
+  function kvTableHtml(title, fields) {
+    const rowsHtml = Object.entries(fields).map(([k, v]) =>
+      `<tr><th>${escapeHtml(k)}</th><td>${escapeHtml(v)}</td></tr>`
+    ).join('');
+    return `<table class="kv"><caption>${escapeHtml(title)}</caption>${rowsHtml}</table>`;
+  }
+  function listHtml(items, emptyText) {
+    if (!items || !items.length) return `<p class="muted">${escapeHtml(emptyText)}</p>`;
+    return `<ol>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ol>`;
+  }
+  function insightSectionHtml(title, data) {
+    if (!data) return '';
+    const rows = flattenInsight(data);
+    if (!rows.length) return '';
+    return `<table class="kv"><caption>${escapeHtml(title)}</caption>${
+      rows.map(r => `<tr><th>${escapeHtml(r.field)}</th><td>${escapeHtml(r.value)}</td></tr>`).join('')
+    }</table>`;
+  }
+  function generateHtml(report) {
+    const companyName = escapeHtml(report.meta.companyName);
+    const readinessRows = report.readiness.sections.map(s =>
+      `<li class="${s.complete ? 'ok' : 'warn'}"><span class="mark">${s.complete ? '\u2713' : '\u26A0'}</span> ${escapeHtml(s.label)} — <em>${escapeHtml(s.source)}</em></li>`
+    ).join('');
+    const statusRows = report.statuses.length
+      ? report.statuses.map(s => `<tr><th>${escapeHtml(s.label)}</th><td><strong>${escapeHtml(s.value)}</strong>${s.detail ? ' — ' + escapeHtml(s.detail) : ''}</td></tr>`).join('')
+      : `<tr><td colspan="2" class="muted">No status data available</td></tr>`;
+    const executionPlanHtml = report.insights.executionPlan.length
+      ? `<table class="kv"><caption>Execution Plan</caption>${report.insights.executionPlan.map(step =>
+          `<tr><th>${escapeHtml(safeVal(step.week, ''))}</th><td>${escapeHtml(safeVal(step.action, ''))}${hasVal(step.owner) ? ' <em>(Owner: ' + escapeHtml(step.owner) + ')</em>' : ''}</td></tr>`
+        ).join('')}</table>`
+      : '';
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>${companyName} — CompanyOS Business Report</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; background:#0d1516; color:#dce4e5; margin:0; padding:0; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  h2 { font-size: 18px; margin: 40px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #2C2C2E; color:#00e5ff; }
+  .subtitle { color:#849396; font-size: 13px; margin-bottom: 24px; }
+  .header-card { background:#1C1C1E; border:1px solid #2C2C2E; border-radius:12px; padding:20px 24px; margin-bottom: 8px; }
+  .header-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap:16px; margin-top:12px; }
+  .header-grid div span.label { display:block; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:#849396; margin-bottom:2px; }
+  .header-grid div span.value { font-size:14px; color:#dce4e5; }
+  table.kv { width:100%; border-collapse: collapse; margin-bottom: 20px; background:#1C1C1E; border:1px solid #2C2C2E; border-radius:8px; overflow:hidden; }
+  table.kv caption { text-align:left; font-weight:600; font-size:13px; padding:10px 14px; background:#192122; color:#00e5ff; caption-side: top; }
+  table.kv th, table.kv td { text-align:left; padding:9px 14px; border-top:1px solid #2C2C2E; font-size:13px; vertical-align: top; }
+  table.kv th { width: 34%; color:#849396; font-weight:500; }
+  table.kv td { color:#dce4e5; word-break: break-word; }
+  ol, ul { padding-left: 20px; font-size: 14px; line-height:1.6; }
+  ul.readiness { list-style:none; padding-left:0; }
+  ul.readiness li { padding:6px 0; border-bottom:1px dashed #2C2C2E; font-size:13px; }
+  ul.readiness li .mark { display:inline-block; width:18px; }
+  ul.readiness li.ok .mark { color:#34C759; }
+  ul.readiness li.warn .mark { color:#f3bf26; }
+  .progress-bar-bg { background:#2e3638; border-radius:6px; height:10px; overflow:hidden; margin: 8px 0 16px; }
+  .progress-bar-fill { background:#00e5ff; height:100%; }
+  .muted { color:#849396; font-style: italic; }
+  .notes-box { background:#1C1C1E; border:1px solid #2C2C2E; border-radius:8px; padding:16px 20px; font-size:14px; white-space:pre-wrap; }
+  footer { margin-top:48px; color:#516368; font-size:11px; text-align:center; }
+  @media print { body { background:#fff; color:#111; } .header-card, table.kv, .notes-box { background:#fff; border-color:#ccc; } h2 { color:#111; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>CompanyOS Business Report</h1>
+  <p class="subtitle">Exported ${escapeHtml(report.meta.generatedAtDisplay)}${report.meta.isDemo ? ' · Demo Profile' : ''}</p>
+
+  <div class="header-card">
+    <div class="header-grid">
+      <div><span class="label">Company</span><span class="value">${companyName}</span></div>
+      <div><span class="label">Industry</span><span class="value">${escapeHtml(report.profile.company['Industry'])}</span></div>
+      <div><span class="label">Stage</span><span class="value">${escapeHtml(report.profile.company['Stage'])}</span></div>
+      <div><span class="label">Location</span><span class="value">${escapeHtml(report.profile.company['City'])}, ${escapeHtml(report.profile.company['Country'])}</span></div>
+    </div>
+  </div>
+
+  <h2>1. Business Profile</h2>
+  ${kvTableHtml('Company Information', report.profile.company)}
+  ${kvTableHtml('Business', report.profile.business)}
+  ${kvTableHtml('Goals', report.profile.goals)}
+  ${kvTableHtml('Financial Information', report.profile.finance)}
+  ${kvTableHtml('Team & Operations', report.profile.team)}
+  ${kvTableHtml('Business Objective', report.profile.objective)}
+
+  <h2>2. Profile Readiness</h2>
+  <p>${report.readiness.complete} / ${report.readiness.total} complete — <strong>${report.readiness.percent}%</strong></p>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${report.readiness.percent}%"></div></div>
+  <ul class="readiness">${readinessRows}</ul>
+
+  <h2>3. Recommendations</h2>
+  ${listHtml(report.recommendations, 'No recommendations available')}
+
+  <h2>3b. Next Steps</h2>
+  ${listHtml(report.nextSteps, 'No next steps available')}
+
+  <h2>4. Statuses</h2>
+  <table class="kv"><caption>Department / Execution Status</caption>${statusRows}</table>
+
+  <h2>5. Notes</h2>
+  <div class="notes-box">${report.notes ? escapeHtml(report.notes) : '<span class="muted">No notes provided</span>'}</div>
+
+  <h2>6. Other Generated Insights</h2>
+  ${report.insights.executiveSummary ? `<table class="kv"><caption>Executive Summary</caption><tr><td>${escapeHtml(report.insights.executiveSummary)}</td></tr></table>` : ''}
+  ${insightSectionHtml('Research', report.insights.research)}
+  ${insightSectionHtml('Finance', report.insights.finance)}
+  ${insightSectionHtml('Marketing', report.insights.marketing)}
+  ${insightSectionHtml('Sales', report.insights.sales)}
+  ${executionPlanHtml}
+
+  <footer>Generated by CompanyOS — this file works standalone and does not require the CompanyOS application to be running.</footer>
+</div>
+</body>
+</html>`;
+  }
+
+  // ─── PDF Export (jsPDF + jsPDF-AutoTable, same normalized report) ─────────
+  function generatePdf(report) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    const marginX = 40;
+    let y = 50;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    function ensureSpace(needed) {
+      if (y + needed > pageHeight - 50) { doc.addPage(); y = 50; }
+    }
+    function heading(text) {
+      ensureSpace(30);
+      doc.setFontSize(13);
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(20, 20, 20);
+      doc.text(text, marginX, y);
+      y += 8;
+      doc.setDrawColor(200, 200, 200);
+      doc.line(marginX, y, pageWidth - marginX, y);
+      y += 16;
+      doc.setFont(undefined, 'normal');
+    }
+    function paragraph(text, opts) {
+      opts = opts || {};
+      doc.setFontSize(opts.size || 10);
+      doc.setTextColor(60, 60, 60);
+      const lines = doc.splitTextToSize(text || '', pageWidth - marginX * 2);
+      lines.forEach(line => {
+        ensureSpace(14);
+        doc.text(line, marginX, y);
+        y += 14;
+      });
+      y += 4;
+    }
+    function table(head, body, caption) {
+      if (!body.length) return;
+      if (caption) {
+        ensureSpace(18);
+        doc.setFontSize(11);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(0, 130, 145);
+        doc.text(caption, marginX, y);
+        y += 14;
+        doc.setFont(undefined, 'normal');
+      }
+      doc.autoTable({
+        startY: y,
+        margin: { left: marginX, right: marginX },
+        head: head ? [head] : undefined,
+        body,
+        styles: { fontSize: 9, cellPadding: 5, textColor: [40, 40, 40] },
+        headStyles: { fillColor: [0, 98, 110], textColor: [255, 255, 255] },
+        alternateRowStyles: { fillColor: [245, 250, 251] },
+        theme: 'grid',
+      });
+      y = doc.lastAutoTable.finalY + 18;
+    }
+
+    // ── Title block ──
+    doc.setFontSize(20);
+    doc.setFont(undefined, 'bold');
+    doc.setTextColor(0, 98, 110);
+    doc.text('COMPANYOS BUSINESS REPORT', marginX, y);
+    y += 26;
+    doc.setDrawColor(0, 229, 255);
+    doc.setLineWidth(1.2);
+    doc.line(marginX, y, pageWidth - marginX, y);
+    y += 22;
+
+    table(null, [
+      ['Company', report.meta.companyName],
+      ['Industry', report.profile.company['Industry']],
+      ['Stage', report.profile.company['Stage']],
+      ['Location', `${report.profile.company['City']}, ${report.profile.company['Country']}`],
+      ['Exported', report.meta.generatedAtDisplay],
+    ]);
+
+    // ── 1. Business Profile ──
+    heading('1. Business Profile');
+    table(['Field', 'Value'], Object.entries(report.profile.company), 'Company Information');
+    table(['Field', 'Value'], Object.entries(report.profile.business), 'Business');
+    table(['Field', 'Value'], Object.entries(report.profile.goals), 'Goals');
+    table(['Field', 'Value'], Object.entries(report.profile.finance), 'Financial Information');
+    table(['Field', 'Value'], Object.entries(report.profile.team), 'Team & Operations');
+    table(['Field', 'Value'], Object.entries(report.profile.objective), 'Business Objective');
+
+    // ── 2. Profile Readiness ──
+    heading('2. Profile Readiness');
+    paragraph(`${report.readiness.complete} / ${report.readiness.total} complete — ${report.readiness.percent}%`, { size: 11 });
+    table(['Section', 'Status', 'Source'], report.readiness.sections.map(s => [s.label, s.complete ? 'Complete' : 'Incomplete', s.source]));
+
+    // ── 3. Recommendations ──
+    heading('3. Recommendations');
+    if (report.recommendations.length) {
+      table(['#', 'Recommendation'], report.recommendations.map((r, i) => [String(i + 1), r]));
+    } else {
+      paragraph('No recommendations available');
+    }
+    if (report.nextSteps.length) {
+      table(['#', 'Next Step'], report.nextSteps.map((r, i) => [String(i + 1), r]), 'Next Steps');
+    }
+
+    // ── 4. Statuses ──
+    heading('4. Statuses');
+    if (report.statuses.length) {
+      table(['Area', 'Status', 'Detail'], report.statuses.map(s => [s.label, s.value, s.detail || '']));
+    } else {
+      paragraph('No status data available');
+    }
+
+    // ── 5. Notes ──
+    heading('5. Notes');
+    paragraph(report.notes || 'No notes provided');
+
+    // ── 6. Other Generated Insights ──
+    heading('6. Other Generated Insights');
+    if (report.insights.executiveSummary) paragraph(report.insights.executiveSummary, { size: 10 });
+    [
+      ['Research', report.insights.research],
+      ['Finance', report.insights.finance],
+      ['Marketing', report.insights.marketing],
+      ['Sales', report.insights.sales],
+    ].forEach(([name, data]) => {
+      if (!data) return;
+      const rows = flattenInsight(data);
+      if (rows.length) table(['Field', 'Value'], rows.map(r => [r.field, r.value]), name);
+    });
+    if (report.insights.executionPlan.length) {
+      table(['Timeframe', 'Action', 'Owner'], report.insights.executionPlan.map(s => [safeVal(s.week, ''), safeVal(s.action, ''), safeVal(s.owner, '')]), 'Execution Plan');
+    }
+
+    // ── Footer with page numbers ──
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`CompanyOS Business Report — ${report.meta.companyName}`, marginX, pageHeight - 24);
+      doc.text(`Page ${i} of ${pageCount}`, pageWidth - marginX - 60, pageHeight - 24);
+    }
+
+    return doc;
+  }
+
+  // ─── Main entry point wired to the Export Report dropdown ─────────────────
+  function exportReport(format) {
+    closeExportMenu();
+    const profile = COMPANY_STATE.currentCompany;
+    const companyResult = COMPANY_STATE.companyResult;
+
+    if (!profile) {
+      alert('No business profile found. Create a company (or try the BeanRush demo) and generate a plan first, then export.');
+      return;
+    }
+
+    const report = buildBusinessReport(profile, companyResult);
+    const base = sanitizeFilenameSegment(report.meta.companyName);
+
+    try {
+      if (format === 'pdf') {
+        if (!window.jspdf) { alert('The PDF library did not load (check your internet connection) — try CSV or HTML instead.'); return; }
+        const doc = generatePdf(report);
+        doc.save(`${base}-CompanyOS-Report.pdf`);
+      } else if (format === 'csv') {
+        downloadBlob(generateCsv(report), `${base}-CompanyOS-Report.csv`, 'text/csv;charset=utf-8;');
+      } else if (format === 'html') {
+        downloadBlob(generateHtml(report), `${base}-CompanyOS-Report.html`, 'text/html;charset=utf-8;');
+      } else {
+        console.warn('[CompanyOS] Unknown export format:', format);
+        return;
+      }
+      addActivity(`Exported ${report.meta.companyName} report (${format.toUpperCase()})`, 'sys');
+    } catch (e) {
+      console.error('[CompanyOS] Export failed:', e);
+      alert('Export failed: ' + (e && e.message ? e.message : 'Unknown error'));
+    }
+  }
 </script>
 </body>
 </html>

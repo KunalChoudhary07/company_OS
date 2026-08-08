@@ -11,6 +11,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from starlette.responses import Response
 
 # Load .env before anything else
 load_dotenv()
@@ -81,7 +82,7 @@ FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..")
 @app.get("/", include_in_schema=False)
 async def serve_frontend():
     index_path = os.path.join(FRONTEND_DIR, "index.html")
-    return FileResponse(index_path)
+    return FileResponse(index_path, headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
 
 # Serve any other static assets (if needed in the future)
 @app.get("/{path:path}", include_in_schema=False)
@@ -91,4 +92,4 @@ async def catch_all(path: str):
         from fastapi import HTTPException
         raise HTTPException(status_code=404)
     index_path = os.path.join(FRONTEND_DIR, "index.html")
-    return FileResponse(index_path)
+    return FileResponse(index_path, headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
